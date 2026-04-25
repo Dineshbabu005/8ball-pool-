@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="theme-color" content="#000">
+    <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>8Ball Pro • Enhanced</title>
+    <title>8Ball Pro • Premium</title>
     <style>
         :root {
             --gold: #f0c040;
             --gold2: #f97316;
             --green: #22c55e;
-            --felt: #176030;
+            --felt: #0d5e2a;
             --wood: #3d1808;
             --neon: #00e5ff;
             --epic: #a855f7;
             --legend: #f97316;
             --mythic: #ff4060;
             --diamond: #67e8f9;
+            --bg: #0a0a0a;
+            --surface: #111;
         }
         * {
             margin: 0;
@@ -32,7 +34,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #000;
+            background: var(--bg);
             font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
         }
         canvas {
@@ -46,6 +48,7 @@
             height: 100%;
             position: relative;
             overflow: hidden;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #050505 100%);
         }
         #gc {
             z-index: 1;
@@ -64,7 +67,6 @@
             z-index: 10;
             pointer-events: none;
         }
-        /* Splash */
         #splash {
             position: absolute;
             inset: 0;
@@ -74,6 +76,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            background: #000;
         }
         #splashBg {
             position: absolute;
@@ -81,6 +84,7 @@
             z-index: 0;
             width: 100%;
             height: 100%;
+            opacity: .7;
         }
         .sp {
             position: relative;
@@ -92,40 +96,50 @@
             width: 100%;
         }
         .sp-logo {
-            font-size: clamp(44px, 12vw, 88px);
+            font-size: clamp(46px, 13vw, 90px);
             font-weight: 900;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             line-height: .9;
             text-align: center;
             background: linear-gradient(170deg, #fff8e0 0%, #ffe566 22%, #f0a000 52%, #b86000 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 6px;
-            filter: drop-shadow(0 0 30px rgba(240, 160, 0, .5));
+            margin-bottom: 4px;
+            filter: drop-shadow(0 0 40px rgba(240, 160, 0, .6));
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        @keyframes logoGlow {
+            0%,
+            100% {
+                filter: drop-shadow(0 0 30px rgba(240, 160, 0, .5));
+            }
+            50% {
+                filter: drop-shadow(0 0 55px rgba(255, 200, 40, .85));
+            }
         }
         .sp-sub {
             font-size: clamp(8px, 1.8vw, 11px);
-            letter-spacing: 6px;
-            color: rgba(255, 255, 255, .3);
+            letter-spacing: 7px;
+            color: rgba(255, 255, 255, .25);
             text-transform: uppercase;
-            margin: 8px 0 18px;
+            margin: 8px 0 20px;
         }
         .sp-ballrow {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            margin-bottom: 24px;
+            gap: 7px;
+            margin-bottom: 26px;
         }
         .sp-ballrow canvas {
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .5));
-            animation: floatBall 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .6));
+            animation: floatBall 2.8s ease-in-out infinite;
         }
         .sp-ballrow canvas:nth-child(odd) {
-            animation-delay: -1.2s;
+            animation-delay: -1.3s;
         }
         .sp-ballrow canvas:nth-child(3n) {
-            animation-delay: -0.6s;
+            animation-delay: -0.7s;
         }
         @keyframes floatBall {
             0%,
@@ -133,16 +147,16 @@
                 transform: translateY(0);
             }
             50% {
-                transform: translateY(-8px);
+                transform: translateY(-10px);
             }
         }
         .sp-btn {
             position: relative;
-            padding: 15px 52px;
+            padding: 16px 56px;
             border-radius: 50px;
             border: none;
             cursor: pointer;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 900;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -150,6 +164,7 @@
             overflow: hidden;
             pointer-events: all;
             transition: .2s;
+            box-shadow: 0 0 50px rgba(240, 165, 0, .35);
         }
         .sp-btn::before {
             content: '';
@@ -165,7 +180,7 @@
             left: 0;
             right: 0;
             height: 52%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, .35), transparent);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .38), transparent);
             border-radius: 50px 50px 0 0;
         }
         .sp-btn span {
@@ -173,37 +188,38 @@
             z-index: 2;
         }
         .sp-btn:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 40px rgba(240, 165, 0, .6);
+            transform: scale(1.04);
+            box-shadow: 0 0 65px rgba(240, 165, 0, .7);
         }
         .sp-btn:active {
-            transform: scale(.94);
+            transform: scale(.93);
         }
         .sp-modes {
             display: flex;
             gap: 10px;
-            margin-top: 16px;
+            margin-top: 18px;
             flex-wrap: wrap;
             justify-content: center;
             pointer-events: all;
         }
         .sp-mode {
-            padding: 8px 20px;
+            padding: 9px 22px;
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, .12);
-            background: rgba(255, 255, 255, .05);
-            color: rgba(255, 255, 255, .65);
+            background: rgba(255, 255, 255, .04);
+            color: rgba(255, 255, 255, .6);
             font-size: 11px;
             font-weight: 700;
             cursor: pointer;
             backdrop-filter: blur(12px);
             transition: .2s;
+            letter-spacing: .5px;
         }
         .sp-mode:hover {
             border-color: rgba(255, 255, 255, .3);
-            background: rgba(255, 255, 255, .1);
+            background: rgba(255, 255, 255, .09);
+            color: #fff;
         }
-        /* HUD */
         #hud {
             position: absolute;
             top: 0;
@@ -211,27 +227,29 @@
             right: 0;
             pointer-events: none;
             display: none;
+            z-index: 11;
         }
         .hud-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: max(env(safe-area-inset-top), 10px) 14px 10px;
-            background: linear-gradient(180deg, rgba(0, 0, 0, .95), transparent);
+            background: linear-gradient(180deg, rgba(0, 0, 0, .92) 60%, transparent);
         }
         .pb {
             display: flex;
             align-items: center;
             gap: 8px;
             flex: 1;
+            min-width: 0;
         }
         .pb.r {
             flex-direction: row-reverse;
         }
         .pav-wrap {
             position: relative;
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             flex-shrink: 0;
         }
         .pav-ring {
@@ -247,13 +265,13 @@
             }
         }
         .pav {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 900;
             letter-spacing: .3px;
             position: relative;
@@ -261,16 +279,17 @@
         }
         .pav-y {
             background: radial-gradient(circle at 38% 32%, #70b0ff, #1d4ed8, #0a1870);
-            box-shadow: 0 0 20px rgba(29, 78, 216, .65), inset 0 1.5px 0 rgba(255, 255, 255, .3);
+            box-shadow: 0 0 18px rgba(29, 78, 216, .6), inset 0 1.5px 0 rgba(255, 255, 255, .3);
         }
         .pav-b {
             background: radial-gradient(circle at 38% 32%, #e070ff, #7c3aed, #3a0a80);
-            box-shadow: 0 0 20px rgba(124, 58, 237, .65), inset 0 1.5px 0 rgba(255, 255, 255, .3);
+            box-shadow: 0 0 18px rgba(124, 58, 237, .6), inset 0 1.5px 0 rgba(255, 255, 255, .3);
         }
         .pname {
             font-size: 11px;
             font-weight: 800;
             color: #fff;
+            white-space: nowrap;
         }
         .pbal {
             font-size: 10px;
@@ -283,7 +302,7 @@
             gap: 3px;
             margin-top: 3px;
             flex-wrap: wrap;
-            max-width: 85px;
+            max-width: 80px;
         }
         .pip {
             width: 10px;
@@ -305,7 +324,7 @@
             letter-spacing: 2px;
         }
         .pot-v {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 900;
             background: linear-gradient(180deg, #ffe97a, #f0a000);
             -webkit-background-clip: text;
@@ -344,7 +363,6 @@
                 transform: scale(.65);
             }
         }
-        /* Controls */
         #ctrl {
             position: absolute;
             bottom: 0;
@@ -352,9 +370,10 @@
             right: 0;
             pointer-events: all;
             display: none;
+            z-index: 11;
         }
         .ctrl-bg {
-            background: linear-gradient(0deg, rgba(0, 0, 0, .98) 55%, transparent);
+            background: linear-gradient(0deg, rgba(0, 0, 0, .96) 55%, transparent);
             padding: 10px 14px max(env(safe-area-inset-bottom), 14px);
         }
         .ctrl-row {
@@ -381,15 +400,17 @@
         }
         .spin-ring {
             position: relative;
-            width: 52px;
-            height: 52px;
+            width: 50px;
+            height: 50px;
             cursor: crosshair;
             border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(255, 255, 255, .02);
         }
         .spin-ind {
             position: absolute;
-            width: 9px;
-            height: 9px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #fff;
             box-shadow: 0 0 10px #fff, 0 0 22px rgba(255, 255, 255, .55);
@@ -401,12 +422,13 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            min-width: 0;
         }
         .pow-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         .pow-pct {
             font-size: 12px;
@@ -417,8 +439,8 @@
             text-align: right;
         }
         .pow-track {
-            height: 8px;
-            background: rgba(255, 255, 255, .06);
+            height: 9px;
+            background: rgba(255, 255, 255, .05);
             border-radius: 5px;
             border: 1px solid rgba(255, 255, 255, .07);
             position: relative;
@@ -431,6 +453,7 @@
             height: 100%;
             border-radius: 5px;
             background: linear-gradient(90deg, #22c55e, #ffe566 55%, #f97316 78%, #ef4444);
+            transition: width .05s;
         }
         .pow-thumb {
             position: absolute;
@@ -447,14 +470,15 @@
         .hints {
             display: flex;
             gap: 7px;
-            margin-top: 7px;
+            margin-top: 6px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         .hint {
             font-size: 7px;
             color: rgba(255, 255, 255, .2);
             background: rgba(255, 255, 255, .03);
-            border: 1px solid rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .05);
             border-radius: 8px;
             padding: 2px 9px;
         }
@@ -465,18 +489,18 @@
             align-items: center;
         }
         #cuebtn {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, .1);
-            background: rgba(255, 255, 255, .05);
+            background: rgba(255, 255, 255, .04);
             cursor: pointer;
             pointer-events: all;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 3px;
+            gap: 2px;
             transition: .2s;
         }
         #cuebtn:hover {
@@ -488,10 +512,12 @@
             transform: scale(.95);
         }
         .cbn {
-            font-size: 7px;
+            font-size: 6px;
             color: rgba(255, 255, 255, .4);
             font-weight: 700;
             letter-spacing: .5px;
+            text-align: center;
+            line-height: 1;
         }
         .shoot-col {
             flex-shrink: 0;
@@ -500,8 +526,8 @@
             align-items: center;
         }
         #shootbtn {
-            width: 60px;
-            height: 60px;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
@@ -539,19 +565,30 @@
         }
         #shootbtn:not(:disabled) {
             box-shadow: 0 0 0 3px rgba(240, 165, 0, .2), 0 6px 30px rgba(200, 100, 0, .6), 0 2px 0 rgba(0, 0, 0, .4);
+            animation: shootPulse 2s ease-in-out infinite;
+        }
+        @keyframes shootPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 3px rgba(240, 165, 0, .2), 0 6px 30px rgba(200, 100, 0, .6);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(240, 165, 0, .08), 0 8px 38px rgba(255, 140, 0, .75);
+            }
         }
         #shootbtn:active {
-            transform: scale(.88);
+            transform: scale(.86);
         }
         #shootbtn:disabled {
             opacity: .25;
             cursor: default;
             transform: none;
             box-shadow: none;
+            animation: none;
         }
         #chalk {
             position: absolute;
-            top: 82px;
+            top: 76px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 15;
@@ -559,21 +596,28 @@
             opacity: 0;
             transition: opacity .25s;
             white-space: nowrap;
-            font-size: clamp(15px, 5vw, 22px);
+            font-size: clamp(14px, 5vw, 20px);
             font-weight: 900;
             letter-spacing: 2px;
-            text-shadow: 0 0 24px #ffe566;
+            text-shadow: 0 0 28px #ffe566;
         }
         #streakBadge {
             position: absolute;
-            top: 130px;
-            right: 16px;
+            top: 120px;
+            right: 14px;
             z-index: 15;
             pointer-events: none;
             opacity: 0;
-            transition: opacity .3s;
+            transition: all .3s;
+            background: rgba(255, 80, 0, .9);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            box-shadow: 0 0 22px rgba(255, 80, 0, .5);
         }
-        /* Shop */
         #shop {
             position: absolute;
             inset: 0;
@@ -599,12 +643,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             cursor: pointer;
+            user-select: none;
         }
         .sh-bal {
             font-size: 13px;
             font-weight: 800;
             color: #4ade80;
-            min-width: 60px;
+            min-width: 55px;
         }
         .sh-x {
             width: 34px;
@@ -648,7 +693,7 @@
             gap: 10px;
         }
         .cc {
-            border-radius: 18px;
+            border-radius: 16px;
             padding: 14px;
             cursor: pointer;
             pointer-events: all;
@@ -662,20 +707,30 @@
             transform: scale(.97);
         }
         .cc.eq {
-            border-color: rgba(255, 229, 102, .45) !important;
+            border-color: rgba(255, 229, 102, .5) !important;
             background: rgba(255, 229, 102, .04) !important;
+            box-shadow: 0 0 20px rgba(255, 200, 40, .12);
         }
         .cc.ow {
-            border-color: rgba(74, 222, 128, .25) !important;
+            border-color: rgba(74, 222, 128, .2) !important;
         }
         .cc.nb {
             border-color: rgba(255, 64, 96, .35) !important;
-            background: rgba(255, 64, 96, .03) !important;
+            animation: newGlow 1.5s ease-in-out infinite;
+        }
+        @keyframes newGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 8px rgba(255, 64, 96, .15);
+            }
+            50% {
+                box-shadow: 0 0 22px rgba(255, 64, 96, .4);
+            }
         }
         .ccg {
             position: absolute;
             inset: 0;
-            border-radius: 18px;
+            border-radius: 16px;
             opacity: 0;
             transition: .3s;
             pointer-events: none;
@@ -692,14 +747,14 @@
             font-size: 7px;
             font-weight: 900;
             padding: 3px 7px;
-            border-radius: 7px;
+            border-radius: 6px;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
         .cc-prev {
             display: block;
             width: 100%;
-            height: 24px;
+            height: 22px;
             margin-bottom: 10px;
         }
         .cc-nm {
@@ -799,7 +854,6 @@
         .btn-dev:active {
             background: rgba(168, 85, 247, .25);
         }
-        /* Win Screen */
         #winscr {
             position: absolute;
             inset: 0;
@@ -811,8 +865,8 @@
         .wbg {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, .87);
-            backdrop-filter: blur(22px);
+            background: rgba(0, 0, 0, .88);
+            backdrop-filter: blur(24px);
         }
         .wbox {
             position: relative;
@@ -915,7 +969,6 @@
             color: rgba(255, 255, 255, .8);
             border: 1px solid rgba(255, 255, 255, .12);
         }
-        /* Dev Builder */
         #devPanel {
             position: absolute;
             inset: 0;
@@ -923,7 +976,7 @@
             display: none;
             flex-direction: column;
             background: rgba(4, 2, 20, .97);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(16px);
         }
         .dv-hdr {
             display: flex;
@@ -957,14 +1010,14 @@
             font-size: 10px;
             font-weight: 700;
             color: rgba(255, 255, 255, .6);
-            min-width: 55px;
+            min-width: 50px;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
         .dv-row input,
         .dv-row select {
             flex: 1;
-            min-width: 80px;
+            min-width: 70px;
             padding: 7px 10px;
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, .12);
@@ -974,12 +1027,16 @@
             font-family: inherit;
         }
         .dv-row input[type="color"] {
-            width: 36px;
-            height: 30px;
+            width: 34px;
+            height: 28px;
             padding: 2px;
             flex: 0;
             min-width: 0;
             cursor: pointer;
+        }
+        .dv-row input[type="range"] {
+            padding: 0;
+            height: 20px;
         }
         .dv-preview {
             width: 100%;
@@ -1050,7 +1107,6 @@
             transition: opacity .3s;
             pointer-events: none;
         }
-        /* Daily Bonus */
         #dailyBonus {
             position: absolute;
             inset: 0;
@@ -1062,8 +1118,8 @@
         .daily-bg {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, .8);
-            backdrop-filter: blur(16px);
+            background: rgba(0, 0, 0, .82);
+            backdrop-filter: blur(18px);
         }
         .daily-box {
             position: relative;
@@ -1104,6 +1160,7 @@
             background: linear-gradient(175deg, #ffe97a, #f0a500);
             color: #1a0800;
             margin-top: 6px;
+            pointer-events: all;
         }
     </style>
 </head>
@@ -1112,12 +1169,11 @@
         <canvas id="gc"></canvas>
         <canvas id="fx"></canvas>
         <div id="ui">
-            <!-- Splash -->
             <div id="splash">
                 <canvas id="splashBg"></canvas>
                 <div class="sp">
                     <div class="sp-logo">8BALL<br>PRO</div>
-                    <div class="sp-sub">Pool Stars · Real Stakes · World Class</div>
+                    <div class="sp-sub">Premium Pool · Real Stakes · Elite Design</div>
                     <div class="sp-ballrow" id="spballs"></div>
                     <button class="sp-btn" onclick="APP.start()"><span>PLAY NOW</span></button>
                     <div class="sp-modes">
@@ -1127,87 +1183,41 @@
                     </div>
                 </div>
             </div>
-            <!-- HUD -->
             <div id="hud">
                 <div class="hud-bar">
                     <div class="pb">
                         <div class="pav-wrap"><div class="pav-ring"></div><div class="pav pav-y">YOU</div></div>
-                        <div>
-                            <div class="pname">You</div>
-                            <div class="pbal" id="hudbal">$25.00</div>
-                            <div class="pstrip" id="ystrip"></div>
-                        </div>
+                        <div><div class="pname">You</div><div class="pbal" id="hudbal">$25.00</div><div class="pstrip" id="ystrip"></div></div>
                     </div>
                     <div class="chud">
-                        <div class="pot-l">Prize Pot</div>
-                        <div class="pot-v">$9.50</div>
+                        <div class="pot-l">Prize Pot</div><div class="pot-v">$9.50</div>
                         <div id="turnpill"><div class="tdot"></div><span id="turntxt">YOUR TURN</span></div>
                     </div>
                     <div class="pb r">
                         <div class="pav-wrap"><div class="pav-ring"></div><div class="pav pav-b">BOT</div></div>
-                        <div style="text-align:right">
-                            <div class="pname">Pro Bot</div>
-                            <div class="pbal" style="color:#f87171">Rival</div>
-                            <div class="pstrip" id="bstrip" style="justify-content:flex-end"></div>
-                        </div>
+                        <div style="text-align:right"><div class="pname">Pro Bot</div><div class="pbal" style="color:#f87171">Rival</div><div class="pstrip" id="bstrip" style="justify-content:flex-end"></div></div>
                     </div>
                 </div>
             </div>
-            <!-- Chalk / Streak -->
             <div id="chalk"></div>
             <div id="streakBadge"></div>
-            <!-- Controls -->
             <div id="ctrl">
-                <div class="ctrl-bg">
-                    <div class="ctrl-row">
-                        <div class="spin-col">
-                            <div class="c-lbl">Spin</div>
-                            <div class="spin-ring" id="spinring">
-                                <canvas id="spinc" width="52" height="52"></canvas>
-                                <div class="spin-ind" id="spind" style="left:50%;top:50%"></div>
-                            </div>
-                        </div>
-                        <div class="pow-col">
-                            <div class="pow-top"><span class="c-lbl">Power</span><span class="pow-pct" id="pwpct">40%</span></div>
-                            <div class="pow-track" id="pwtrack">
-                                <div class="pow-fill" id="pwfill" style="width:40%"></div>
-                                <div class="pow-thumb" id="pwthumb" style="left:40%"></div>
-                            </div>
-                            <div class="hints"><div class="hint">Drag to aim</div><div class="hint">SHOOT or tap</div></div>
-                        </div>
-                        <div class="cue-col">
-                            <div class="c-lbl">Cue</div>
-                            <div id="cuebtn" onclick="APP.openShop()">
-                                <canvas id="cuemini" width="36" height="10"></canvas>
-                                <div class="cbn" id="cuemname">Classic</div>
-                            </div>
-                        </div>
-                        <div class="shoot-col">
-                            <div class="c-lbl">Fire</div>
-                            <button id="shootbtn" onclick="APP.shoot()"><span class="stxt">SHOOT</span></button>
-                        </div>
-                    </div>
-                </div>
+                <div class="ctrl-bg"><div class="ctrl-row">
+                        <div class="spin-col"><div class="c-lbl">Spin</div><div class="spin-ring" id="spinring"><canvas id="spinc" width="50" height="50"></canvas><div class="spin-ind" id="spind" style="left:50%;top:50%"></div></div></div>
+                        <div class="pow-col"><div class="pow-top"><span class="c-lbl">Power</span><span class="pow-pct" id="pwpct">40%</span></div><div class="pow-track" id="pwtrack"><div class="pow-fill" id="pwfill" style="width:40%"></div><div class="pow-thumb" id="pwthumb" style="left:40%"></div></div><div class="hints"><div class="hint">Drag to aim</div><div class="hint">Space to shoot</div></div></div>
+                        <div class="cue-col"><div class="c-lbl">Cue</div><div id="cuebtn" onclick="APP.openShop()"><canvas id="cuemini" width="36" height="10"></canvas><div class="cbn" id="cuemname">Classic</div></div></div>
+                        <div class="shoot-col"><div class="c-lbl">Fire</div><button id="shootbtn" onclick="APP.shoot()"><span class="stxt">SHOOT</span></button></div>
+                </div></div>
             </div>
-            <!-- Shop -->
             <div id="shop">
-                <div class="sh-hdr">
-                    <div class="sh-ttl" id="shopTitle" onclick="APP.toggleDevMode()">CUE SHOP</div>
-                    <div class="sh-bal">$<span id="shopbal">25.00</span></div>
-                    <button class="btn-dev" id="devBtn" onclick="APP.openDevPanel()" style="display:none;">🔧 DEV</button>
-                    <div class="sh-x" onclick="APP.closeShop()">✕</div>
-                </div>
+                <div class="sh-hdr"><div class="sh-ttl" id="shopTitle" onclick="APP.toggleDevMode()">CUE SHOP</div><div class="sh-bal">$<span id="shopbal">25.00</span></div><button class="btn-dev" id="devBtn" onclick="APP.openDevPanel()" style="display:none;">🔧 DEV</button><div class="sh-x" onclick="APP.closeShop()">✕</div></div>
                 <div class="sh-body" id="shopbody"></div>
             </div>
-            <!-- Dev Panel -->
             <div id="devPanel">
-                <div class="dv-hdr">
-                    <div class="dv-ttl">🧬 CUE BUILDER</div>
-                    <div class="sh-x" onclick="APP.closeDevPanel()">✕</div>
-                </div>
+                <div class="dv-hdr"><div class="dv-ttl">🧬 CUE BUILDER</div><div class="sh-x" onclick="APP.closeDevPanel()">✕</div></div>
                 <div class="dv-body" id="devBody">
                     <div class="dv-row"><label>Name</label><input id="dvName" type="text" value="Custom Cue" maxlength="18"></div>
-                    <div class="dv-row"><label>Tier</label><select id="dvTier"><option>Wood</option><option>Rare</option><option>Epic</option><option>Legendary</option><option>Diamond</option><option>Mythic</option></select></div>
+                    <div class="dv-row"><label>Tier</label><select id="dvTier"><option>Wood</option><option>Rare</option><option>Epic</option><option>Legendary</option><option>Diamond</option><option>Mythic</option><option>Custom</option></select></div>
                     <div class="dv-row"><label>Badge</label><input id="dvBadge" type="text" value="CUSTOM" maxlength="10"></div>
                     <div class="dv-row"><label>Price</label><input id="dvPrice" type="number" value="9.99" step="0.01" min="0"></div>
                     <div class="dv-row"><label>Power</label><input id="dvPow" type="range" min="20" max="95" value="55"></div>
@@ -1225,110 +1235,78 @@
                         <button class="dv-export" onclick="APP.exportCues()">📋 Export All</button>
                         <button class="dv-del" onclick="APP.clearCustomCues()">🗑 Clear Custom</button>
                     </div>
-                    <div style="font-size:8px;color:rgba(255,255,255,.3);margin-top:8px;line-height:1.5">
-                        💡 <b>Developer Mode:</b> Create custom cues here.<br>
-                        • Triple-click "CUE SHOP" title to toggle dev mode.<br>
-                        • Custom cues appear in the shop under "Custom" tier.<br>
-                        • Export saves all cues as JSON for sharing.<br>
-                        • Data stored in your browser (localStorage).
-                    </div>
+                    <div style="font-size:7px;color:rgba(255,255,255,.25);margin-top:8px;line-height:1.5">💡 Triple-click "CUE SHOP" title for dev mode. Custom cues saved in browser. Export as JSON to share.</div>
                 </div>
                 <div id="devToast"></div>
             </div>
-            <!-- Daily Bonus -->
-            <div id="dailyBonus">
-                <div class="daily-bg"></div>
-                <div class="daily-box">
-                    <div class="daily-ico">🎁</div>
-                    <div class="daily-ttl">DAILY BONUS</div>
-                    <div class="daily-amt" id="dailyAmt">+$2.50</div>
-                    <button class="daily-btn" onclick="APP.claimDaily()">CLAIM</button>
-                </div>
-            </div>
-            <!-- Win Screen -->
-            <div id="winscr">
-                <div class="wbg"></div>
-                <div class="wbox">
-                    <div class="wico" id="wico">🎉</div>
-                    <div class="wttl" id="wttl">YOU WON!</div>
-                    <div class="wsub" id="wsub">Credited to your wallet</div>
-                    <div class="wamt pos" id="wamt">+$9.50</div>
-                    <div class="wbtns">
-                        <button class="wb wb-g" onclick="APP.restart()">Play Again</button>
-                        <button class="wb wb-o" onclick="APP.lobby()">Lobby</button>
-                    </div>
-                </div>
-            </div>
+            <div id="dailyBonus"><div class="daily-bg"></div><div class="daily-box"><div class="daily-ico">🎁</div><div class="daily-ttl">DAILY BONUS</div><div class="daily-amt" id="dailyAmt">+$2.50</div><button class="daily-btn" onclick="APP.claimDaily()">CLAIM</button></div></div>
+            <div id="winscr"><div class="wbg"></div><div class="wbox"><div class="wico" id="wico">🎉</div><div class="wttl" id="wttl">YOU WON!</div><div class="wsub" id="wsub">Credited to your wallet</div><div class="wamt pos" id="wamt">+$9.50</div><div class="wbtns"><button class="wb wb-g" onclick="APP.restart()">Play Again</button><button class="wb wb-o" onclick="APP.lobby()">Lobby</button></div></div></div>
         </div>
     </div>
     <script>
         const APP = (() => {
             'use strict';
-
-            // ── BUILT-IN CUES (20+) ──────────────────────────────
             const BUILTIN_CUES = [
-                { id: 0, name: 'Classic', tier: 'Wood', tc: '#c8a060', price: 0, owned: true, power: 40, aim: 40,
-                    spin: 35, time: 40, badge: null, glow: 'rgba(140,180,255,0)', c1: '#e8d080', c2: '#c09040',
-                    ring: '#c0a040' },
-                { id: 1, name: 'Viper', tier: 'Rare', tc: '#00e5ff', price: 4.99, owned: false, power: 60, aim: 65,
-                    spin: 52, time: 55, badge: 'RARE', glow: 'rgba(0,229,255,.45)', c1: '#e8faff', c2: '#60b0e0',
+                { id: 0, name: 'Classic Maple', tier: 'Wood', tc: '#c8a060', price: 0, owned: true, power: 40, aim: 40,
+                    spin: 35, time: 40, badge: null, glow: 'rgba(140,180,255,0)', c1: '#f5e6c8', c2: '#b8945c',
+                    ring: '#c8a060' },
+                { id: 1, name: 'Neon Viper', tier: 'Rare', tc: '#00e5ff', price: 4.99, owned: false, power: 60, aim: 65,
+                    spin: 52, time: 55, badge: 'RARE', glow: 'rgba(0,229,255,.5)', c1: '#e8faff', c2: '#3bc0e8',
                     ring: '#00e5ff' },
-                { id: 2, name: 'Predator', tier: 'Rare', tc: '#ff6020', price: 6.99, owned: false, power: 65, aim: 60,
-                    spin: 55, time: 58, badge: 'RARE', glow: 'rgba(255,96,32,.4)', c1: '#ffe0c0', c2: '#ff8030',
+                { id: 2, name: 'Predator X', tier: 'Rare', tc: '#ff6020', price: 6.99, owned: false, power: 65, aim: 60,
+                    spin: 55, time: 58, badge: 'RARE', glow: 'rgba(255,96,32,.45)', c1: '#ffe0c8', c2: '#e8481a',
                     ring: '#ff6020' },
                 { id: 3, name: 'Neon Blaze', tier: 'Epic', tc: '#ff40c0', price: 12.99, owned: false, power: 72, aim: 70,
-                    spin: 68, time: 65, badge: 'EPIC', glow: 'rgba(255,64,192,.5)', c1: '#ffe0f0', c2: '#ff40a0',
+                    spin: 68, time: 65, badge: 'EPIC', glow: 'rgba(255,64,192,.55)', c1: '#ffe0f4', c2: '#e030a0',
                     ring: '#ff40c0' },
-                { id: 4, name: 'Thunder', tier: 'Epic', tc: '#facc15', price: 14.99, owned: false, power: 75, aim: 68,
-                    spin: 62, time: 70, badge: 'EPIC', glow: 'rgba(250,204,21,.5)', c1: '#fffde0', c2: '#eab308',
+                { id: 4, name: 'Thunder Bolt', tier: 'Epic', tc: '#facc15', price: 14.99, owned: false, power: 75, aim: 68,
+                    spin: 62, time: 70, badge: 'EPIC', glow: 'rgba(250,204,21,.55)', c1: '#fffde0', c2: '#d4a80a',
                     ring: '#facc15' },
-                { id: 5, name: 'Shadow', tier: 'Legendary', tc: '#888', price: 19.99, owned: false, power: 80, aim: 78,
-                    spin: 75, time: 76, badge: 'LEGEND', glow: 'rgba(180,180,180,.55)', c1: '#ddd', c2: '#444',
-                    ring: '#999' },
-                { id: 6, name: 'Phoenix', tier: 'Legendary', tc: '#ff6600', price: 22.99, owned: false, power: 82, aim: 80,
-                    spin: 78, time: 80, badge: 'LEGEND', glow: 'rgba(255,102,0,.55)', c1: '#ffe0c0', c2: '#cc3300',
+                { id: 5, name: 'Shadow Phantom', tier: 'Legendary', tc: '#999', price: 19.99, owned: false, power: 80,
+                    aim: 78, spin: 75, time: 76, badge: 'LEGEND', glow: 'rgba(180,180,180,.55)', c1: '#e8e8e8',
+                    c2: '#3a3a3a', ring: '#aaa' },
+                { id: 6, name: 'Phoenix Fire', tier: 'Legendary', tc: '#ff6600', price: 22.99, owned: false, power: 82,
+                    aim: 80, spin: 78, time: 80, badge: 'LEGEND', glow: 'rgba(255,102,0,.6)', c1: '#ffe8d0', c2: '#c0400a',
                     ring: '#ff6600' },
-                { id: 7, name: 'Diamond Edge', tier: 'Diamond', tc: '#67e8f9', price: 29.99, owned: false, power: 85,
-                    aim: 85, spin: 82, time: 84, badge: 'DIAMOND', glow: 'rgba(103,232,249,.6)', c1: '#e0faff',
-                    c2: '#3bc9db', ring: '#67e8f9' },
-                { id: 8, name: 'Royal Gold', tier: 'Diamond', tc: '#ffd700', price: 34.99, owned: false, power: 88,
-                    aim: 86, spin: 84, time: 88, badge: 'DIAMOND', glow: 'rgba(255,215,0,.6)', c1: '#fffde0',
-                    c2: '#b8860b', ring: '#ffd700' },
+                { id: 7, name: 'Diamond Edge', tier: 'Diamond', tc: '#67e8f9', price: 29.99, owned: false, power: 85, aim: 85,
+                    spin: 82, time: 84, badge: 'DIAMOND', glow: 'rgba(103,232,249,.65)', c1: '#e0faff', c2: '#2db8c8',
+                    ring: '#67e8f9' },
+                { id: 8, name: 'Royal Gold', tier: 'Diamond', tc: '#ffd700', price: 34.99, owned: false, power: 88, aim: 86,
+                    spin: 84, time: 88, badge: 'DIAMOND', glow: 'rgba(255,215,0,.65)', c1: '#fffde0', c2: '#b8860b',
+                    ring: '#ffd700' },
                 { id: 9, name: 'Void Reaper', tier: 'Mythic', tc: '#ff2040', price: 49.99, owned: false, power: 92, aim: 90,
-                    spin: 88, time: 90, badge: 'MYTHIC', glow: 'rgba(255,32,64,.7)', c1: '#ffe0e0', c2: '#8b0000',
+                    spin: 88, time: 90, badge: 'MYTHIC', glow: 'rgba(255,32,64,.75)', c1: '#ffe0e0', c2: '#7a0010',
                     ring: '#ff2040' },
                 { id: 10, name: 'Cosmic Ray', tier: 'Mythic', tc: '#c084fc', price: 54.99, owned: false, power: 94, aim: 92,
-                    spin: 90, time: 93, badge: 'MYTHIC', glow: 'rgba(192,132,252,.7)', c1: '#f3e8ff', c2: '#6b21a8',
+                    spin: 90, time: 93, badge: 'MYTHIC', glow: 'rgba(192,132,252,.75)', c1: '#f3e8ff', c2: '#5c1da0',
                     ring: '#c084fc' },
                 { id: 11, name: 'Frost Bite', tier: 'Epic', tc: '#38bdf8', price: 11.99, owned: false, power: 68, aim: 72,
-                    spin: 65, time: 62, badge: 'EPIC', glow: 'rgba(56,189,248,.5)', c1: '#e0f4ff', c2: '#0284c7',
+                    spin: 65, time: 62, badge: 'EPIC', glow: 'rgba(56,189,248,.5)', c1: '#e0f4ff', c2: '#0278b8',
                     ring: '#38bdf8' },
                 { id: 12, name: 'Jade Serpent', tier: 'Rare', tc: '#34d399', price: 7.99, owned: false, power: 62, aim: 64,
-                    spin: 58, time: 60, badge: 'RARE', glow: 'rgba(52,211,153,.4)', c1: '#d1fae5', c2: '#059669',
+                    spin: 58, time: 60, badge: 'RARE', glow: 'rgba(52,211,153,.45)', c1: '#d1fae5', c2: '#058a50',
                     ring: '#34d399' },
                 { id: 13, name: 'Crimson Fury', tier: 'Epic', tc: '#dc2626', price: 13.99, owned: false, power: 74, aim: 69,
-                    spin: 66, time: 68, badge: 'EPIC', glow: 'rgba(220,38,38,.5)', c1: '#fee2e2', c2: '#991b1b',
+                    spin: 66, time: 68, badge: 'EPIC', glow: 'rgba(220,38,38,.5)', c1: '#fee2e2', c2: '#8b1010',
                     ring: '#dc2626' },
                 { id: 14, name: 'Solar Flare', tier: 'Legendary', tc: '#fb923c', price: 21.99, owned: false, power: 81,
-                    aim: 79, spin: 76, time: 78, badge: 'LEGEND', glow: 'rgba(251,146,60,.55)', c1: '#fff7ed',
-                    c2: '#c2410c', ring: '#fb923c' },
-                { id: 15, name: 'Abyssal', tier: 'Mythic', tc: '#1e1b4b', price: 59.99, owned: false, power: 95, aim: 93,
-                    spin: 91, time: 95, badge: 'MYTHIC', glow: 'rgba(30,27,75,.75)', c1: '#6366f1', c2: '#0f0d2e',
+                    aim: 79, spin: 76, time: 78, badge: 'LEGEND', glow: 'rgba(251,146,60,.6)', c1: '#fff7ed', c2: '#b84a0c',
+                    ring: '#fb923c' },
+                { id: 15, name: 'Abyssal Deep', tier: 'Mythic', tc: '#1e1b4b', price: 59.99, owned: false, power: 95, aim: 93,
+                    spin: 91, time: 95, badge: 'MYTHIC', glow: 'rgba(30,27,75,.8)', c1: '#6366f1', c2: '#0a0820',
                     ring: '#818cf8' },
                 { id: 16, name: 'Emerald King', tier: 'Diamond', tc: '#10b981', price: 32.99, owned: false, power: 86,
-                    aim: 84, spin: 83, time: 86, badge: 'DIAMOND', glow: 'rgba(16,185,129,.6)', c1: '#d1fae5',
-                    c2: '#047857', ring: '#10b981' },
-                { id: 17, name: 'Obsidian', tier: 'Rare', tc: '#444', price: 5.99, owned: false, power: 58, aim: 62,
-                    spin: 50, time: 56, badge: 'RARE', glow: 'rgba(100,100,100,.35)', c1: '#999', c2: '#1a1a1a',
-                    ring: '#666' },
-                { id: 18, name: 'Aurora', tier: 'Legendary', tc: '#8b5cf6', price: 24.99, owned: false, power: 83, aim: 81,
-                    spin: 79, time: 82, badge: 'LEGEND', glow: 'rgba(139,92,246,.55)', c1: '#ede9fe', c2: '#5b21b6',
+                    aim: 84, spin: 83, time: 86, badge: 'DIAMOND', glow: 'rgba(16,185,129,.6)', c1: '#d1fae5', c2: '#036840',
+                    ring: '#10b981' },
+                { id: 17, name: 'Obsidian Dark', tier: 'Rare', tc: '#555', price: 5.99, owned: false, power: 58, aim: 62,
+                    spin: 50, time: 56, badge: 'RARE', glow: 'rgba(100,100,100,.4)', c1: '#aaa', c2: '#181818', ring: '#666' },
+                { id: 18, name: 'Aurora Mist', tier: 'Legendary', tc: '#8b5cf6', price: 24.99, owned: false, power: 83,
+                    aim: 81, spin: 79, time: 82, badge: 'LEGEND', glow: 'rgba(139,92,246,.6)', c1: '#ede9fe', c2: '#4c1da8',
                     ring: '#8b5cf6' },
-                { id: 19, name: 'Blizzard', tier: 'Diamond', tc: '#e0f2fe', price: 31.99, owned: false, power: 87, aim: 87,
-                    spin: 85, time: 87, badge: 'DIAMOND', glow: 'rgba(224,242,254,.6)', c1: '#ffffff', c2: '#7dd3fc',
+                { id: 19, name: 'Blizzard White', tier: 'Diamond', tc: '#e0f2fe', price: 31.99, owned: false, power: 87,
+                    aim: 87, spin: 85, time: 87, badge: 'DIAMOND', glow: 'rgba(224,242,254,.6)', c1: '#ffffff', c2: '#7dd3fc',
                     ring: '#bae6fd' },
             ];
-
             let CUES = [...BUILTIN_CUES];
             const BCOLS = [null, '#f5d800', '#1060c0', '#c62828', '#6a1b9a', '#e05000', '#1e7a2a', '#880e4f', '#111',
                 '#f5d800', '#1060c0', '#c62828', '#6a1b9a', '#e05000', '#1e7a2a', '#880e4f'
@@ -1338,10 +1316,14 @@
             ];
             const SC = { power: '#f97316', aim: '#22c55e', spin: '#a78bfa', time: '#60a5fa' };
             const TBGC = { Wood: 'rgba(200,160,96,.12)', Rare: 'rgba(96,165,250,.12)', Epic: 'rgba(249,115,22,.12)',
-                Legendary: 'rgba(240,192,64,.12)', Diamond: 'rgba(103,232,249,.12)', Mythic: 'rgba(255,64,96,.14)',
+                Legendary: 'rgba(240,192,64,.12)', Diamond: 'rgba(103,232,249,.12)', Mythic: 'rgba(255,64,96,.16)',
                 Custom: 'rgba(168,85,247,.14)' };
             const FRIC = .9888,
-                MINV = .075;
+                MINV = .06;
+            const POCKET_RADIUS_MULT = 2.4;
+            const POCKET_SUCTION_RANGE = 3.2;
+            const POCKET_SUCTION_FORCE = .04;
+            const POCKET_GAP_MULT = 2.8;
 
             let gc, fc, ctx, fctx, W, H, DPR;
             let TW, TH, BR, PR, GAP, TX, TY, PAD = {};
@@ -1365,11 +1347,11 @@
                 maxStreak = 0;
             let devMode = false;
             let streakTimeout;
+            let ambientParticles = [];
 
-            // ── SETUP ────────────────────────────────────────────
             function setup() {
                 gc = document.getElementById('gc');
-                fc = document.getElementById('fx') || document.getElementById('fx');
+                fc = document.getElementById('fx');
                 DPR = Math.min(window.devicePixelRatio || 1, 2.5);
                 doResize();
                 ctx = gc.getContext('2d');
@@ -1382,6 +1364,7 @@
                 buildSplash();
                 loadCustomCues();
                 checkDailyBonus();
+                initAmbientParticles();
             }
 
             function doResize() {
@@ -1394,19 +1377,61 @@
                 TW = W > H ? Math.min(W * .87, 720) : W * .93;
                 TH = TW * .505;
                 BR = TW * .033;
-                PR = BR * 1.48;
+                PR = BR * POCKET_RADIUS_MULT;
                 GAP = BR * 2.08;
                 TX = (W - TW) / 2;
                 TY = (H - TH) / 2 - 14;
                 PAD = { L: TX + TW * .075, R: TX + TW - TW * .075, T: TY + TH * .125, B: TY + TH - TH * .125 };
                 pockets = [
-                    { x: TX + TW * .043, y: TY + TH * .073 }, { x: TX + TW * .5, y: TY + TH * .022 },
-                    { x: TX + TW * .957, y: TY + TH * .073 }, { x: TX + TW * .043, y: TY + TH * .927 },
-                    { x: TX + TW * .5, y: TY + TH * .978 }, { x: TX + TW * .957, y: TY + TH * .927 }
+                    { x: TX + TW * .043, y: TY + TH * .073, type: 'corner' },
+                    { x: TX + TW * .5, y: TY + TH * .022, type: 'side' },
+                    { x: TX + TW * .957, y: TY + TH * .073, type: 'corner' },
+                    { x: TX + TW * .043, y: TY + TH * .927, type: 'corner' },
+                    { x: TX + TW * .5, y: TY + TH * .978, type: 'side' },
+                    { x: TX + TW * .957, y: TY + TH * .927, type: 'corner' },
                 ];
+                initAmbientParticles();
             }
 
-            // ── SPLASH ──────────────────────────────────────────
+            function initAmbientParticles() {
+                ambientParticles = [];
+                for (let i = 0; i < 20; i++) {
+                    ambientParticles.push({
+                        x: TX + Math.random() * TW,
+                        y: TY + Math.random() * TH,
+                        vx: (Math.random() - .5) * .15,
+                        vy: (Math.random() - .5) * .15 - .03,
+                        life: Math.random(),
+                        maxLife: 3 + Math.random() * 5,
+                        r: .4 + Math.random() * .8,
+                        alpha: .08 + Math.random() * .18,
+                    });
+                }
+            }
+
+            function updateAmbientParticles() {
+                ambientParticles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life += .016;
+                    if (p.life > p.maxLife) { p.life = 0;
+                        p.x = TX + Math.random() * TW;
+                        p.y = TY + Math.random() * TH; }
+                });
+            }
+
+            function drawAmbientParticles(c) {
+                c.save();
+                ambientParticles.forEach(p => {
+                    const alpha = p.alpha * (1 - Math.abs(p.life / p.maxLife - .5) * 2);
+                    c.beginPath();
+                    c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    c.fillStyle = `rgba(255,255,240,${alpha.toFixed(3)})`;
+                    c.fill();
+                });
+                c.restore();
+            }
+
             function buildSplash() {
                 const sc = document.getElementById('splashBg');
                 sc.width = window.innerWidth;
@@ -1430,14 +1455,6 @@
                         sx2.arc(bx, by, r, 0, Math.PI * 2);
                         sx2.fill();
                     }
-                    for (let i = 0; i < 5; i++) {
-                        const bx2 = ((spT * 18 + i * 137.5) % sc.width),
-                            by2 = ((spT * 7 + i * 89.3) % sc.height);
-                        sx2.beginPath();
-                        sx2.arc(bx2, by2, Math.random() < .01 ? 2.5 : 1.2, 0, Math.PI * 2);
-                        sx2.fillStyle = `rgba(255,255,255,${.18+Math.sin(spT*4+i)*.14})`;
-                        sx2.fill();
-                    }
                     spT += .013;
                     spRaf = requestAnimationFrame(loop);
                 }
@@ -1453,7 +1470,6 @@
                 });
             }
 
-            // ── TABLE BAKING ─────────────────────────────────────
             function bakeTable() {
                 const oc = document.createElement('canvas');
                 oc.width = W * DPR;
@@ -1466,22 +1482,16 @@
             }
 
             function drawBG(c) {
-                const g = c.createLinearGradient(0, 0, 0, H);
-                g.addColorStop(0, '#060e06');
-                g.addColorStop(.5, '#030803');
-                g.addColorStop(1, '#020502');
+                const g = c.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * .85);
+                g.addColorStop(0, '#141410');
+                g.addColorStop(.5, '#0a0a08');
+                g.addColorStop(1, '#030302');
                 c.fillStyle = g;
                 c.fillRect(0, 0, W, H);
                 const rg = c.createRadialGradient(W / 2, H * .38, 0, W / 2, H * .5, Math.max(W, H) * .7);
-                rg.addColorStop(0, 'rgba(30,80,30,.18)');
+                rg.addColorStop(0, 'rgba(25,70,30,.12)');
                 rg.addColorStop(1, 'transparent');
                 c.fillStyle = rg;
-                c.fillRect(0, 0, W, H);
-                const lc = c.createRadialGradient(W / 2, -20, 0, W / 2, H * .32, H * .8);
-                lc.addColorStop(0, 'rgba(255,248,200,.07)');
-                lc.addColorStop(.35, 'rgba(255,235,160,.03)');
-                lc.addColorStop(1, 'transparent');
-                c.fillStyle = lc;
                 c.fillRect(0, 0, W, H);
             }
 
@@ -1501,96 +1511,88 @@
                     y = TY,
                     w = TW,
                     h = TH;
-                // Outer shadow
                 c.shadowColor = 'rgba(0,0,0,.95)';
-                c.shadowBlur = 80;
-                c.shadowOffsetY = 20;
+                c.shadowBlur = 90;
+                c.shadowOffsetY = 22;
                 c.beginPath();
-                rr(c, x - 34, y - 34, w + 68, h + 68, 24);
-                c.fillStyle = '#060100';
+                rr(c, x - 40, y - 40, w + 80, h + 80, 28);
+                c.fillStyle = '#040100';
                 c.fill();
                 c.shadowColor = 'transparent';
-                // Legs
-                [
-                    [x + 44, x + 60],
-                    [x + w - 60, x + w - 44]
-                ].forEach(([lx, rx]) => {
-                    const ly = y + h,
-                        bot = ly + 58;
-                    c.beginPath();
-                    c.moveTo(lx, ly);
-                    c.lineTo(rx, ly);
-                    c.lineTo(rx - 3, bot);
-                    c.lineTo(lx + 3, bot);
-                    c.closePath();
-                    const lg = c.createLinearGradient(lx, ly, lx, bot);
-                    lg.addColorStop(0, '#6a3a12');
-                    lg.addColorStop(.5, '#4a2008');
-                    lg.addColorStop(1, '#1e0c04');
-                    c.fillStyle = lg;
-                    c.fill();
-                });
-                // Wood grain
-                const wg = c.createLinearGradient(x - 34, y - 34, x + w + 34, y + h + 34);
-                ['#3a1808', '#5c2a0e', '#6e3410', '#804018', '#6e3410', '#5c2a0e', '#3a1808'].forEach((col, i) => wg
+                const wg = c.createLinearGradient(x - 40, y - 40, x + w + 40, y + h + 40);
+                ['#2a1008', '#4a2010', '#5c2a12', '#6e3414', '#5c2a12', '#4a2010', '#2a1008'].forEach((col, i) => wg
                     .addColorStop(i / 6, col));
                 c.beginPath();
-                rr(c, x - 34, y - 34, w + 68, h + 68, 24);
+                rr(c, x - 40, y - 40, w + 80, h + 80, 28);
                 c.fillStyle = wg;
                 c.fill();
-                // Wood grain lines
                 c.save();
                 c.beginPath();
-                rr(c, x - 34, y - 34, w + 68, h + 68, 24);
+                rr(c, x - 40, y - 40, w + 80, h + 80, 28);
                 c.clip();
-                for (let i = 0; i < 18; i++) {
+                for (let i = 0; i < 22; i++) {
                     c.beginPath();
-                    c.moveTo(x - 34 + i * 12, y - 34);
-                    c.lineTo(x - 34 + i * 12 + 3, y + h + 34);
-                    c.strokeStyle = 'rgba(0,0,0,.04)';
-                    c.lineWidth = 2 + Math.sin(i) * 1.5;
+                    c.moveTo(x - 40 + i * 10, y - 40);
+                    c.lineTo(x - 40 + i * 10 + 4, y + h + 40);
+                    c.strokeStyle = 'rgba(0,0,0,.05)';
+                    c.lineWidth = 2 + Math.sin(i * .7) * 2;
+                    c.stroke();
+                }
+                for (let i = 0; i < 12; i++) {
+                    c.beginPath();
+                    c.moveTo(x - 40, y - 40 + i * 14);
+                    c.lineTo(x + w + 40, y - 40 + i * 14 + 5);
+                    c.strokeStyle = 'rgba(255,200,120,.02)';
+                    c.lineWidth = 1.5;
                     c.stroke();
                 }
                 c.restore();
                 c.beginPath();
-                rr(c, x - 34, y - 34, w + 68, h + 68, 24);
-                c.strokeStyle = 'rgba(220,150,70,.14)';
-                c.lineWidth = 1.5;
+                rr(c, x - 40, y - 40, w + 80, h + 80, 28);
+                c.strokeStyle = 'rgba(200,140,60,.12)';
+                c.lineWidth = 2;
                 c.stroke();
-                // Inner rail
                 c.beginPath();
-                rr(c, x - 9, y - 9, w + 18, h + 18, 11);
-                c.strokeStyle = 'rgba(60,28,8,.5)';
-                c.lineWidth = 4;
+                rr(c, x - 10, y - 10, w + 20, h + 20, 12);
+                c.strokeStyle = 'rgba(40,16,4,.5)';
+                c.lineWidth = 5;
                 c.stroke();
-                // Felt
                 const fg = c.createRadialGradient(x + w * .5, y + h * .42, 0, x + w * .5, y + h * .52, Math.max(w, h) * .72);
-                fg.addColorStop(0, '#249640');
-                fg.addColorStop(.4, '#1c7836');
-                fg.addColorStop(.78, '#145828');
-                fg.addColorStop(1, '#0e4420');
+                fg.addColorStop(0, '#1a8040');
+                fg.addColorStop(.35, '#167034');
+                fg.addColorStop(.7, '#105828');
+                fg.addColorStop(1, '#0c401c');
                 c.beginPath();
                 rr(c, x, y, w, h, 5);
                 c.fillStyle = fg;
                 c.fill();
-                // Felt texture
                 c.save();
                 c.beginPath();
                 rr(c, x, y, w, h, 5);
                 c.clip();
-                c.fillStyle = 'rgba(0,0,0,.03)';
-                for (let i = 0; i <= Math.ceil(w / 20); i++) {
+                c.fillStyle = 'rgba(0,0,0,.025)';
+                for (let i = 0; i <= Math.ceil(w / 18); i++) {
                     c.beginPath();
-                    c.moveTo(x + i * 20, y);
-                    c.lineTo(x + i * 20, y + h);
+                    c.moveTo(x + i * 18, y);
+                    c.lineTo(x + i * 18 + 1, y + h);
                     c.stroke();
                 }
-                for (let i = 0; i <= Math.ceil(h / 20); i++) {
+                for (let i = 0; i <= Math.ceil(h / 18); i++) {
                     c.beginPath();
-                    c.moveTo(x, y + i * 20);
-                    c.lineTo(x + w, y + i * 20);
+                    c.moveTo(x, y + i * 18);
+                    c.lineTo(x + w, y + i * 18 + 1);
                     c.stroke();
                 }
+                const light1 = c.createRadialGradient(x + w * .35, y + h * .3, 0, x + w * .35, y + h * .3, w * .55);
+                light1.addColorStop(0, 'rgba(255,255,240,.06)');
+                light1.addColorStop(1, 'transparent');
+                c.fillStyle = light1;
+                c.fillRect(x, y, w, h);
+                const light2 = c.createRadialGradient(x + w * .65, y + h * .65, 0, x + w * .65, y + h * .65, w * .5);
+                light2.addColorStop(0, 'rgba(255,255,240,.04)');
+                light2.addColorStop(1, 'transparent');
+                c.fillStyle = light2;
+                c.fillRect(x, y, w, h);
                 c.strokeStyle = 'rgba(255,255,255,.04)';
                 c.lineWidth = 1;
                 c.beginPath();
@@ -1610,16 +1612,15 @@
                     [x + w * .28, y + h * .5]
                 ].forEach(([px, py]) => {
                     c.beginPath();
-                    c.arc(px, py, 3, 0, Math.PI * 2);
-                    c.fillStyle = 'rgba(255,255,255,.14)';
+                    c.arc(px, py, 3.5, 0, Math.PI * 2);
+                    c.fillStyle = 'rgba(255,255,255,.16)';
                     c.fill();
                 });
                 c.restore();
-                // Cushions
                 const csh = c.createLinearGradient(0, y, 0, y + h);
-                csh.addColorStop(0, '#2c9e50');
-                csh.addColorStop(.5, '#1c7838');
-                csh.addColorStop(1, '#2c9e50');
+                csh.addColorStop(0, '#28a050');
+                csh.addColorStop(.5, '#1a7838');
+                csh.addColorStop(1, '#28a050');
                 [
                     [x + PR * .82, y + 1, w - PR * 1.64, h * .057],
                     [x + PR * .82, y + h - h * .057 - 1, w - PR * 1.64, h * .057],
@@ -1631,84 +1632,83 @@
                     c.fillStyle = csh;
                     c.fill();
                     const hl = c.createLinearGradient(cx2, cy2, cx2, cy2 + ch * .4);
-                    hl.addColorStop(0, 'rgba(140,255,160,.1)');
+                    hl.addColorStop(0, 'rgba(130,255,150,.08)');
                     hl.addColorStop(1, 'transparent');
                     c.fillStyle = hl;
                     c.fill();
-                    c.strokeStyle = 'rgba(80,220,100,.12)';
+                    c.strokeStyle = 'rgba(70,210,90,.1)';
                     c.lineWidth = .8;
                     c.stroke();
                 });
-                // Pockets
                 pockets.forEach(p => {
+                    const isSide = p.type === 'side';
+                    const prDraw = isSide ? PR * .85 : PR;
                     c.beginPath();
-                    c.arc(p.x, p.y, PR + 8, 0, Math.PI * 2);
-                    c.fillStyle = 'rgba(0,0,0,.65)';
+                    c.arc(p.x, p.y, prDraw + 9, 0, Math.PI * 2);
+                    c.fillStyle = 'rgba(0,0,0,.7)';
                     c.fill();
-                    const pg = c.createRadialGradient(p.x - PR * .2, p.y - PR * .2, 0, p.x, p.y, PR);
-                    pg.addColorStop(0, '#1c1c1c');
-                    pg.addColorStop(.7, '#0c0c0c');
-                    pg.addColorStop(1, '#000');
+                    const pg = c.createRadialGradient(p.x - prDraw * .2, p.y - prDraw * .2, 0, p.x, p.y, prDraw);
+                    pg.addColorStop(0, '#1a1818');
+                    pg.addColorStop(.6, '#0a0a0a');
+                    pg.addColorStop(1, '#020202');
                     c.beginPath();
-                    c.arc(p.x, p.y, PR, 0, Math.PI * 2);
+                    c.arc(p.x, p.y, prDraw, 0, Math.PI * 2);
                     c.fillStyle = pg;
                     c.fill();
-                    const ib = c.createRadialGradient(p.x, p.y, PR * .55, p.x, p.y, PR);
+                    const ib = c.createRadialGradient(p.x, p.y, prDraw * .55, p.x, p.y, prDraw);
                     ib.addColorStop(0, 'transparent');
-                    ib.addColorStop(1, 'rgba(0,80,200,.22)');
+                    ib.addColorStop(1, 'rgba(0,60,180,.2)');
                     c.beginPath();
-                    c.arc(p.x, p.y, PR, 0, Math.PI * 2);
+                    c.arc(p.x, p.y, prDraw, 0, Math.PI * 2);
                     c.fillStyle = ib;
                     c.fill();
                     c.beginPath();
-                    c.arc(p.x, p.y, PR, 0, Math.PI * 2);
-                    c.strokeStyle = 'rgba(100,150,70,.1)';
+                    c.arc(p.x, p.y, prDraw, 0, Math.PI * 2);
+                    c.strokeStyle = 'rgba(80,120,60,.08)';
                     c.lineWidth = 2;
                     c.stroke();
                     c.beginPath();
-                    c.arc(p.x - PR * .28, p.y - PR * .3, PR * .14, 0, Math.PI * 2);
-                    c.fillStyle = 'rgba(255,255,255,.05)';
+                    c.arc(p.x - prDraw * .28, p.y - prDraw * .3, prDraw * .14, 0, Math.PI * 2);
+                    c.fillStyle = 'rgba(255,255,255,.04)';
                     c.fill();
                 });
-                // Corner dots
                 [
-                    [x + w * .24, y - 23],
-                    [x + w * .76, y - 23],
-                    [x + w * .24, y + h + 23],
-                    [x + w * .76, y + h + 23],
-                    [x - 23, y + h * .3],
-                    [x - 23, y + h * .7],
-                    [x + w + 23, y + h * .3],
-                    [x + w + 23, y + h * .7]
+                    [x + w * .24, y - 24],
+                    [x + w * .76, y - 24],
+                    [x + w * .24, y + h + 24],
+                    [x + w * .76, y + h + 24],
+                    [x - 24, y + h * .3],
+                    [x - 24, y + h * .7],
+                    [x + w + 24, y + h * .3],
+                    [x + w + 24, y + h * .7]
                 ].forEach(([bx, by]) => {
-                    const bg = c.createRadialGradient(bx - 2, by - 2, 0, bx, by, 9);
-                    bg.addColorStop(0, '#d8a060');
-                    bg.addColorStop(.6, '#a07030');
-                    bg.addColorStop(1, '#4a3010');
+                    const bg = c.createRadialGradient(bx - 2, by - 2, 0, bx, by, 10);
+                    bg.addColorStop(0, '#e0b870');
+                    bg.addColorStop(.6, '#b08040');
+                    bg.addColorStop(1, '#5a3018');
                     c.beginPath();
-                    c.arc(bx, by, 9, 0, Math.PI * 2);
+                    c.arc(bx, by, 10, 0, Math.PI * 2);
                     c.fillStyle = bg;
                     c.fill();
                     c.beginPath();
-                    c.arc(bx, by, 9, 0, Math.PI * 2);
-                    c.strokeStyle = 'rgba(255,200,80,.06)';
+                    c.arc(bx, by, 10, 0, Math.PI * 2);
+                    c.strokeStyle = 'rgba(255,200,80,.05)';
                     c.lineWidth = 1;
                     c.stroke();
                     c.beginPath();
-                    c.arc(bx - 2.5, by - 2.5, 3, 0, Math.PI * 2);
-                    c.fillStyle = 'rgba(255,230,140,.45)';
+                    c.arc(bx - 3, by - 3, 3.5, 0, Math.PI * 2);
+                    c.fillStyle = 'rgba(255,230,140,.5)';
                     c.fill();
                 });
             }
 
-            // ── BALL DRAWING ────────────────────────────────────
             function drawBall(c, x, y, r, num) {
                 c.save();
                 const col = BCOLS[num];
-                c.shadowColor = 'rgba(0,0,0,.6)';
-                c.shadowBlur = r * .85;
-                c.shadowOffsetX = r * .12;
-                c.shadowOffsetY = r * .3;
+                c.shadowColor = 'rgba(0,0,0,.55)';
+                c.shadowBlur = r * .7;
+                c.shadowOffsetX = r * .1;
+                c.shadowOffsetY = r * .25;
                 const bg = c.createRadialGradient(x - r * .33, y - r * .38, r * .03, x + r * .1, y + r * .12, r * 1.08);
                 if (num === 0) { bg.addColorStop(0, '#fff');
                     bg.addColorStop(.5, '#ebebeb');
@@ -1760,10 +1760,14 @@
                 c.fill();
                 const rim = c.createRadialGradient(x, y, r * .68, x, y, r);
                 rim.addColorStop(0, 'rgba(0,0,0,0)');
-                rim.addColorStop(1, 'rgba(0,0,0,.34)');
+                rim.addColorStop(1, 'rgba(0,0,0,.3)');
                 c.beginPath();
                 c.arc(x, y, r, 0, Math.PI * 2);
                 c.fillStyle = rim;
+                c.fill();
+                c.beginPath();
+                c.arc(x - r * .25, y - r * .3, r * .08, 0, Math.PI * 2);
+                c.fillStyle = 'rgba(255,255,255,.5)';
                 c.fill();
                 c.restore();
             }
@@ -1775,7 +1779,6 @@
             function hr(h) { return { r: parseInt(h.slice(1, 3), 16), g: parseInt(h.slice(3, 5), 16), b: parseInt(h.slice(5, 7),
                     16) }; }
 
-            // ── CUE DRAWING HELPERS ────────────────────────────
             function seg(c, ox, oy, L, a, segs) { let cur = 0; const cos = Math.cos(a),
                     sin = Math.sin(a);
                 segs.forEach(s => { const sl = s.p * L;
@@ -1786,29 +1789,25 @@
                     c.lineWidth = s.w;
                     c.lineCap = s.cap || 'butt';
                     c.stroke();
-                    cur += sl; });
-                c.beginPath();
-                c.moveTo(ox - sin * 2, oy + cos * 2);
-                c.lineTo(ox - sin * 2 + cos * L * .5, oy + cos * 2 + sin * L * .5);
-                c.strokeStyle = 'rgba(255,255,255,.18)';
-                c.lineWidth = 1.5;
-                c.lineCap = 'round';
-                c.stroke(); }
+                    cur += sl; }); }
 
             function ringAt(c, ox, oy, L, a, pct, w, col) { const x = ox + Math.cos(a) * pct * L,
                     y = oy + Math.sin(a) * pct * L; const nx = Math.sin(a),
                     ny = -Math.cos(a);
                 c.beginPath();
-                c.moveTo(x - nx * (w / 2), y - ny * (w / 2));
-                c.lineTo(x + nx * (w / 2), y + ny * (w / 2));
-                c.strokeStyle = col;
-                c.lineWidth = 2.5;
-                c.lineCap = 'butt';
+                c.arc(x, y, w / 2, 0, Math.PI * 2);
+                c.fillStyle = col;
+                c.fill();
+                c.beginPath();
+                c.moveTo(x - nx * (w / 2 + 2), y - ny * (w / 2 + 2));
+                c.lineTo(x + nx * (w / 2 + 2), y + ny * (w / 2 + 2));
+                c.strokeStyle = 'rgba(255,255,255,.3)';
+                c.lineWidth = .8;
                 c.stroke(); }
 
             function addGlow(c, ox, oy, L, a, col) { c.save();
                 c.shadowColor = col;
-                c.shadowBlur = 14;
+                c.shadowBlur = 16;
                 c.beginPath();
                 c.moveTo(ox, oy);
                 c.lineTo(ox + Math.cos(a) * L * .7, oy + Math.sin(a) * L * .7);
@@ -1819,34 +1818,79 @@
 
             function drawCueFull(c, ox, oy, L, a, cueData) {
                 const segs = [
-                    { p: .07, w: 5, col: '#b0d4f0', cap: 'round' }, { p: .05, w: 5, col: cueData.c1 },
-                    { p: .38, w: 6, col: cueData.c1 }, { p: .08, w: 6.5, col: cueData.c2 },
-                    { p: .12, w: 7, col: '#4a2008' }, { p: .30, w: 9, col: '#1a0800' }
+                    { p: .015, w: 3.5, col: '#f8f8f8', cap: 'round' },
+                    { p: .03, w: 4.5, col: '#e8e0d8' },
+                    { p: .35, w: 5, col: cueData.c1 },
+                    { p: .04, w: 5.5, col: '#d0c8b8' },
+                    { p: .06, w: 6, col: cueData.c2 },
+                    { p: .015, w: 6.5, col: '#3a1a08' },
+                    { p: .08, w: 7, col: cueData.c2 },
+                    { p: .04, w: 7.5, col: cueData.c1 },
+                    { p: .03, w: 8, col: '#2a1008' },
+                    { p: .28, w: 9, col: '#140600' },
+                    { p: .06, w: 10, col: '#0a0200' },
                 ];
                 seg(c, ox, oy, L, a, segs);
-                ringAt(c, ox, oy, L, a, .54, 8, cueData.ring);
-                ringAt(c, ox, oy, L, a, .58, 8, cueData.ring);
+                ringAt(c, ox, oy, L, a, .048, 5, '#f0f0f0');
+                ringAt(c, ox, oy, L, a, .40, 6.5, cueData.ring);
+                ringAt(c, ox, oy, L, a, .50, 7, cueData.ring);
+                ringAt(c, ox, oy, L, a, .56, 8, '#3a1a08');
                 if (cueData.glow && cueData.glow !== 'rgba(140,180,255,0)') addGlow(c, ox, oy, L, a, cueData.glow);
             }
 
-            // ── PARTICLES ───────────────────────────────────────
+            function isNearPocketOnWall(bx, by, wallSide) {
+                const gapDist = PR * POCKET_GAP_MULT;
+                for (const p of pockets) {
+                    let onWall = false;
+                    let distAlong = 0;
+                    if (wallSide === 'top' && p.y < PAD.T + gapDist * .7) { onWall = true;
+                        distAlong = Math.abs(bx - p.x); } else if (wallSide === 'bottom' && p.y > PAD.B - gapDist * .7) { onWall =
+                            true;
+                        distAlong = Math.abs(bx - p.x); } else if (wallSide === 'left' && p.x < PAD.L + gapDist * .7) { onWall =
+                            true;
+                        distAlong = Math.abs(by - p.y); } else if (wallSide === 'right' && p.x > PAD.R - gapDist * .7) { onWall =
+                            true;
+                        distAlong = Math.abs(by - p.y); }
+                    if (onWall && distAlong < gapDist) return true;
+                }
+                return false;
+            }
+
+            function applyPocketSuction(b) {
+                for (const p of pockets) {
+                    const dx = p.x - b.x,
+                        dy = p.y - b.y,
+                        dist = Math.hypot(dx, dy);
+                    const suctionRange = PR * POCKET_SUCTION_RANGE;
+                    if (dist < suctionRange && dist > .01) {
+                        const speed = Math.hypot(b.vx, b.vy);
+                        const factor = Math.max(0, (1 - dist / suctionRange)) * POCKET_SUCTION_FORCE;
+                        const effectiveFactor = factor * (1 + (1 - Math.min(speed, 3) / 3) * 3);
+                        b.vx += (dx / dist) * effectiveFactor;
+                        b.vy += (dy / dist) * effectiveFactor;
+                    }
+                }
+            }
+
             function spawnPocket(x, y) {
                 const cols = ['#ffe566', '#22c55e', '#60a5fa', '#f87171', '#a78bfa', '#fff', '#fb923c', '#34d399',
-                    '#ff40c0', '#67e8f9'
+                    '#ff40c0', '#67e8f9', '#ffd700'
                 ];
-                for (let i = 0; i < 40; i++) {
+                for (let i = 0; i < 45; i++) {
                     const a = Math.random() * Math.PI * 2,
-                        spd = 2 + Math.random() * 6.5;
-                    parts.push({ x, y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd - 3, life: 1, decay: .022 + Math.random() *
-                            .02, r: 2 + Math.random() * 7, col: cols[~~(Math.random() * cols.length)] });
+                        spd = 2 + Math.random() * 7;
+                    parts.push({ x, y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd - 3.5, life: 1, decay: .02 + Math.random() *
+                            .022, r: 2 + Math.random() * 8, col: cols[~~(Math.random() * cols.length)] });
                 }
-                parts.push({ x, y, vx: 0, vy: 0, life: 1, decay: .038, r: 0, maxR: PR * 4, ring: true,
-                    col: 'rgba(255,220,100,.65)' });
+                parts.push({ x, y, vx: 0, vy: 0, life: 1, decay: .035, r: 0, maxR: PR * 4.5, ring: true,
+                    col: 'rgba(255,220,100,.6)' });
+                parts.push({ x, y, vx: 0, vy: 0, life: .5, decay: .06, r: 0, maxR: PR * 6, ring: true,
+                    col: 'rgba(255,255,255,.25)' });
             }
 
             function spawnTrail(bx, by) {
-                parts.push({ x: bx, y: by, vx: 0, vy: 0, life: .6, decay: .08, r: BR * .4, col: 'rgba(255,255,255,.5)',
-                    trail: true });
+                if (Math.random() < .6) parts.push({ x: bx, y: by, vx: 0, vy: 0, life: .5, decay: .09, r: BR * .35,
+                    col: 'rgba(255,255,255,.4)', trail: true });
             }
 
             function updateFX() {
@@ -1856,11 +1900,11 @@
                     p.life -= p.decay;
                     if (p.life <= 0) { parts.splice(i, 1); continue; }
                     if (p.ring) {
-                        p.r += (p.maxR - p.r) * .1;
+                        p.r += (p.maxR - p.r) * .08;
                         fctx.beginPath();
                         fctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                        fctx.strokeStyle = p.col.replace('.65)', `,${(p.life*.65).toFixed(2)})`);
-                        fctx.lineWidth = 2 * p.life;
+                        fctx.strokeStyle = p.col.replace(/[\d.]+\)$/, `${(p.life*parseFloat(p.col.match(/[\d.]+\)$/)?.[0]||.6)).toFixed(2)})`);
+                        fctx.lineWidth = 2.5 * p.life;
                         fctx.stroke();
                     } else if (p.trail) {
                         fctx.save();
@@ -1887,31 +1931,34 @@
                 }
             }
 
-            // ── PHYSICS ─────────────────────────────────────────
             function physics() {
                 let moving = false;
                 balls.forEach(b => {
                     if (b.sunk) return;
+                    applyPocketSuction(b);
                     b.x += b.vx;
                     b.y += b.vy;
                     b.vx *= FRIC;
                     b.vy *= FRIC;
                     if (Math.abs(b.vx) < MINV) b.vx = 0;
                     if (Math.abs(b.vy) < MINV) b.vy = 0;
-                    if (b.vx || b.vy) { moving = true; if (b.num === 0 && Math.random() < .3) spawnTrail(b.x, b.y); }
-                    if (b.x - BR < PAD.L) { b.x = PAD.L + BR;
+                    if (b.vx || b.vy) { moving = true; if (b.num === 0 && Math.random() < .35) spawnTrail(b.x, b.y); }
+                    if (b.x - BR < PAD.L && !isNearPocketOnWall(b.x, b.y, 'left')) { b.x = PAD.L + BR;
                         b.vx = Math.abs(b.vx) * .76; }
-                    if (b.x + BR > PAD.R) { b.x = PAD.R - BR;
+                    if (b.x + BR > PAD.R && !isNearPocketOnWall(b.x, b.y, 'right')) { b.x = PAD.R - BR;
                         b.vx = -Math.abs(b.vx) * .76; }
-                    if (b.y - BR < PAD.T) { b.y = PAD.T + BR;
+                    if (b.y - BR < PAD.T && !isNearPocketOnWall(b.x, b.y, 'top')) { b.y = PAD.T + BR;
                         b.vy = Math.abs(b.vy) * .76; }
-                    if (b.y + BR > PAD.B) { b.y = PAD.B - BR;
+                    if (b.y + BR > PAD.B && !isNearPocketOnWall(b.x, b.y, 'bottom')) { b.y = PAD.B - BR;
                         b.vy = -Math.abs(b.vy) * .76; }
-                    pockets.forEach(p => { if (Math.hypot(b.x - p.x, b.y - p.y) < PR) { b.sunk = true;
+                    pockets.forEach(p => {
+                        const pRadius = p.type === 'side' ? PR * .88 : PR;
+                        if (Math.hypot(b.x - p.x, b.y - p.y) < pRadius) { b.sunk = true;
                             b.vx = 0;
                             b.vy = 0;
                             spawnPocket(p.x, p.y);
-                            onSunk(b); } });
+                            onSunk(b); }
+                    });
                 });
                 for (let i = 0; i < balls.length; i++) {
                     for (let j = i + 1; j < balls.length; j++) {
@@ -1950,11 +1997,11 @@
                         b.x = TX + TW * .27;
                         b.y = TY + TH * .5;
                         b.vx = 0;
-                        b.vy = 0; }, 920);
+                        b.vy = 0; }, 900);
                     return;
                 }
                 if (b.num === 8) { const w = yN.filter(n => !balls.find(bb => bb.num === n && bb.sunk)).length === 0;
-                    setTimeout(() => endGame(w), 740); return; }
+                    setTimeout(() => endGame(w), 700); return; }
                 yN = yN.filter(n => n !== b.num);
                 bN = bN.filter(n => n !== b.num);
                 streak++;
@@ -1969,28 +2016,21 @@
 
             function updateStreakBadge() {
                 const el = document.getElementById('streakBadge');
-                if (streak >= 3) {
-                    el.textContent = `🔥 ${streak}x`;
-                    el.style.opacity = '1';
-                    el.style.cssText =
-                        `position:absolute;top:130px;right:16px;z-index:15;pointer-events:none;opacity:1;transition:opacity .3s;background:rgba(255,100,0,.9);color:#fff;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;letter-spacing:1px;box-shadow:0 0 20px rgba(255,100,0,.6);`;
-                } else {
-                    el.style.opacity = '0';
-                }
+                if (streak >= 3) { el.textContent = `🔥 ${streak}x`;
+                    el.style.opacity = '1'; } else { el.style.opacity = '0'; }
             }
 
             function switchTurn() { yourTurn = !yourTurn;
-                updateHUD(); if (!yourTurn && !over) setTimeout(botShoot, 980 + ~~(Math.random() * 720)); }
+                updateHUD(); if (!yourTurn && !over) setTimeout(botShoot, 900 + ~~(Math.random() * 700)); }
 
             function botShoot() { if (over || yourTurn) return; const tgts = balls.filter(b => !b.sunk && b.num !== 0 && (bN
                     .includes(b.num) || (bN.length === 0 && b.num === 8))); if (!tgts.length) return; const t = tgts[~~(Math
                     .random() * Math.min(2, tgts.length))]; const a = Math.atan2(t.y - cb.y, t.x - cb.x) + (Math.random() -
-                    .5) * .28; const cue = CUES[eq]; cb.vx = Math.cos(a) * (.36 + Math.random() * .52) * (8.5 + cue.power *
+                    .5) * .3; const cue = CUES[eq]; cb.vx = Math.cos(a) * (.38 + Math.random() * .5) * (8.5 + cue.power *
                     .075);
-                cb.vy = Math.sin(a) * (.36 + Math.random() * .52) * (8.5 + cue.power * .075);
+                cb.vy = Math.sin(a) * (.38 + Math.random() * .5) * (8.5 + cue.power * .075);
                 shooting = true; }
 
-            // ── RENDER LOOP ─────────────────────────────────────
             function drawAim() {
                 if (!yourTurn || shooting || over || !cb || cb.sunk) return;
                 const cos = Math.cos(angle),
@@ -2003,53 +2043,69 @@
                 const ex = cb.x + cos * t,
                     ey = cb.y + sin2 * t;
                 ctx.save();
-                ctx.globalAlpha = .18;
+                ctx.globalAlpha = .2;
                 ctx.beginPath();
-                ctx.arc(ex, ey, BR, 0, Math.PI * 2);
+                ctx.arc(ex, ey, BR * 1.1, 0, Math.PI * 2);
                 ctx.fillStyle = '#fff';
                 ctx.fill();
                 ctx.restore();
                 ctx.save();
-                ctx.setLineDash([10, 9]);
+                ctx.setLineDash([8, 7]);
                 const lg = ctx.createLinearGradient(cb.x, cb.y, ex, ey);
-                lg.addColorStop(0, 'rgba(255,255,255,.72)');
-                lg.addColorStop(.4, 'rgba(255,255,210,.28)');
-                lg.addColorStop(1, 'rgba(255,255,255,.04)');
+                lg.addColorStop(0, 'rgba(255,255,255,.7)');
+                lg.addColorStop(.35, 'rgba(255,255,210,.25)');
+                lg.addColorStop(1, 'rgba(255,255,255,.03)');
                 ctx.strokeStyle = lg;
-                ctx.lineWidth = 1.6;
+                ctx.lineWidth = 1.5;
                 ctx.beginPath();
                 ctx.moveTo(cb.x, cb.y);
                 ctx.lineTo(ex, ey);
                 ctx.stroke();
                 ctx.setLineDash([]);
                 ctx.beginPath();
-                ctx.arc(ex, ey, 5.5, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255,255,255,.35)';
+                ctx.arc(ex, ey, 5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,.4)';
                 ctx.fill();
                 ctx.restore();
-                const pull = 12 + power * 36;
+                const pull = 14 + power * 34;
                 const cue = CUES[eq];
                 ctx.save();
                 if (cue.glow && cue.glow !== 'rgba(140,180,255,0)') { ctx.shadowColor = cue.glow;
-                    ctx.shadowBlur = 16; }
-                drawCueFull(ctx, cb.x - cos * (BR + 5 + pull), cb.y - sin2 * (BR + 5 + pull), TW * .36, angle + Math.PI,
-                cue);
+                    ctx.shadowBlur = 18; }
+                drawCueFull(ctx, cb.x - cos * (BR + 4 + pull), cb.y - sin2 * (BR + 4 + pull), TW * .34, angle + Math.PI,
+                    cue);
                 ctx.restore();
+            }
+
+            function drawBallShadow(c, b) {
+                if (b.sunk) return;
+                const sx = b.x + BR * .25,
+                    sy = b.y + BR * .4;
+                c.save();
+                c.beginPath();
+                c.ellipse(sx, sy, BR * .7, BR * .35, -0.3, 0, Math.PI * 2);
+                c.fillStyle = 'rgba(0,0,0,.35)';
+                c.fill();
+                c.restore();
             }
 
             function loop() {
                 raf = requestAnimationFrame(loop);
                 ctx.clearRect(0, 0, W, H);
                 if (tableImg) ctx.drawImage(tableImg, 0, 0, W * DPR, H * DPR, 0, 0, W, H);
+                updateAmbientParticles();
+                drawAmbientParticles(ctx);
+                [...balls].filter(b => !b.sunk).sort((a, b2) => a.y - b2.y).forEach(b => {
+                    drawBallShadow(ctx, b);
+                    if (b.num !== 0) drawBall(ctx, b.x, b.y, BR, b.num);
+                });
+                if (cb && !cb.sunk) { drawBallShadow(ctx, cb);
+                    drawBall(ctx, cb.x, cb.y, BR, 0); }
                 drawAim();
-                [...balls].filter(b => !b.sunk).sort((a, b2) => a.y - b2.y).forEach(b => { if (b.num !== 0) drawBall(ctx, b
-                        .x, b.y, BR, b.num); });
-                if (cb && !cb.sunk) drawBall(ctx, cb.x, cb.y, BR, 0);
                 physics();
                 updateFX();
             }
 
-            // ── GAME INIT ───────────────────────────────────────
             function initBalls() { balls = []; const sx2 = TX + TW * .655,
                     sy2 = TY + TH * .5; [
                     [8],
@@ -2076,18 +2132,20 @@
             function chalk(msg, col = '#ffe566') { const el = document.getElementById('chalk');
                 el.textContent = msg;
                 el.style.color = col;
-                el.style.textShadow = `0 0 24px ${col}`;
+                el.style.textShadow = `0 0 28px ${col}`;
                 el.style.opacity = '1';
                 clearTimeout(chT);
                 chT = setTimeout(() => el.style.opacity = '0', 1600); }
 
             function buildSpinCanvas() { const c = document.getElementById('spinc'),
-                    cx = c.getContext('2d'); const g = cx.createRadialGradient(18, 16, 0, 26, 26, 22);
+                    cx = c.getContext('2d');
+                c.width = 50;
+                c.height = 50; const g = cx.createRadialGradient(17, 15, 0, 25, 25, 22);
                 g.addColorStop(0, '#f0f0f0');
                 g.addColorStop(.5, '#c8c8c8');
                 g.addColorStop(1, '#888');
                 cx.beginPath();
-                cx.arc(26, 26, 22, 0, Math.PI * 2);
+                cx.arc(25, 25, 22, 0, Math.PI * 2);
                 cx.fillStyle = g;
                 cx.fill();
                 cx.strokeStyle = 'rgba(255,255,255,.1)';
@@ -2096,15 +2154,14 @@
                 cx.strokeStyle = 'rgba(0,0,0,.14)';
                 cx.lineWidth = .8;
                 cx.beginPath();
-                cx.moveTo(26, 6);
-                cx.lineTo(26, 46);
+                cx.moveTo(25, 5);
+                cx.lineTo(25, 45);
                 cx.stroke();
                 cx.beginPath();
-                cx.moveTo(6, 26);
-                cx.lineTo(46, 26);
+                cx.moveTo(5, 25);
+                cx.lineTo(45, 25);
                 cx.stroke(); }
 
-            // ── SHOP RENDERING ──────────────────────────────────
             function renderShop() {
                 const body = document.getElementById('shopbody');
                 const tiers = ['Wood', 'Rare', 'Epic', 'Legendary', 'Diamond', 'Mythic', 'Custom'];
@@ -2126,8 +2183,9 @@
                         if (cue.badge) html +=
                             `<div class="cc-bdg" style="background:${TBGC[tier]||'rgba(255,255,255,.1)'};color:${cue.tc||'#a855f7'}">${cue.badge}</div>`;
                         html +=
-                        `<canvas class="cc-prev" id="sc${cue.id}" height="24"></canvas>`;
-                        html += `<div class="cc-nm">${cue.name}${isNew?' 🆕':''}</div>`;
+                        `<canvas class="cc-prev" id="sc${cue.id}" height="22"></canvas>`;
+                        html +=
+                            `<div class="cc-nm">${cue.name}${isNew?' 🆕':''}</div>`;
                         html +=
                             `<div class="cc-tr" style="color:${cue.tc||'#a855f7'}">${tier}</div>`;
                         ['power', 'aim', 'spin', 'time'].forEach(s => {
@@ -2136,7 +2194,7 @@
                         });
                         html += `<div class="cc-ft">`;
                         if (iseq) html +=
-                            `<span class="cc-pr" style="color:${cue.tc||'#a855f7'}">Equipped</span><button class="cc-ac btn-eqd">✓ Active</button>`;
+                            `<span class="cc-pr" style="color:${cue.tc||'#a855f7'}">Active</span><button class="cc-ac btn-eqd">✓</button>`;
                         else if (isow) html +=
                             `<span class="cc-pr" style="color:#4ade80">Owned</span><button class="cc-ac btn-eq" onclick="event.stopPropagation();APP.equipCue(${cue.id})">Equip</button>`;
                         else html +=
@@ -2168,12 +2226,11 @@
                     c = mc.getContext('2d');
                 c.clearRect(0, 0, 36, 10);
                 c.save(); if (cue.glow && cue.glow !== 'rgba(140,180,255,0)') { c.shadowColor = cue.glow;
-                    c.shadowBlur = 6; }
+                    c.shadowBlur = 5; }
                 drawCueFull(c, 0, 5, 36, 0, cue);
                 c.restore();
                 document.getElementById('cuemname').textContent = cue.name; }
 
-            // ── WIN / LOSE ──────────────────────────────────────
             function endGame(youWin) {
                 over = true;
                 document.getElementById('winscr').style.display = 'flex';
@@ -2185,236 +2242,161 @@
                 const amt = youWin ? 9.50 : -5.00;
                 wa.textContent = (youWin ? '+' : '') + '$' + Math.abs(amt).toFixed(2);
                 wa.className = 'wamt ' + (youWin ? 'pos' : 'neg');
-                if (youWin) { bal += 9.50; } else { bal = Math.max(0, bal - 5); }
-                if (maxStreak >= 5) chalk('🏆 RECORD STREAK: ' + maxStreak + 'x!', '#ffd700');
+                if (youWin) bal += 9.50;
+                else bal = Math.max(0, bal - 5);
+                if (maxStreak >= 5) chalk('🏆 RECORD: ' + maxStreak + 'x STREAK!', '#ffd700');
                 streak = 0;
                 maxStreak = 0;
                 updateStreakBadge();
                 updateHUD();
             }
 
-            // ── CUSTOM CUE STORAGE ──────────────────────────────
             function loadCustomCues() {
                 try {
-                    const saved = localStorage.getItem('8ball_custom_cues');
+                    const saved = localStorage.getItem('8ball_custom_cues_v2');
                     if (saved) {
                         const custom = JSON.parse(saved);
                         custom.forEach((c, i) => { c.id = 100 + i;
                             c._custom = true; if (!c.owned) c.owned = false; });
                         CUES = [...BUILTIN_CUES, ...custom];
                     }
-                } catch (e) { console.log('No custom cues found'); }
+                } catch (e) {}
             }
 
-            function saveCustomCuesToStorage() {
-                const custom = CUES.filter(c => c._custom);
-                localStorage.setItem('8ball_custom_cues', JSON.stringify(custom));
-            }
+            function saveCustomCuesToStorage() { const custom = CUES.filter(c => c._custom);
+                localStorage.setItem('8ball_custom_cues_v2', JSON.stringify(custom)); }
 
-            function addCustomCue(cueData) {
-                const newId = Math.max(100, ...CUES.map(c => c.id)) + 1;
-                const newCue = { ...cueData, id: newId, _custom: true, owned: true, tier: cueData.tier || 'Custom' };
+            function addCustomCue(cueData) { const newId = Math.max(100, ...CUES.map(c => c.id)) + 1; const newCue = { ...cueData,
+                    id: newId, _custom: true, owned: true, tier: cueData.tier || 'Custom' };
                 CUES.push(newCue);
                 saveCustomCuesToStorage();
                 renderShop();
-                showDevToast('✅ Cue saved! Check "Custom" tier in shop.');
-            }
+                showDevToast('✅ Cue saved! Check "Custom" tier.'); }
 
-            function clearCustomCues() {
-                CUES = [...BUILTIN_CUES];
-                localStorage.removeItem('8ball_custom_cues');
+            function clearCustomCues() { CUES = [...BUILTIN_CUES];
+                localStorage.removeItem('8ball_custom_cues_v2');
                 renderShop();
-                showDevToast('🗑 All custom cues cleared.');
-            }
+                showDevToast('🗑 Custom cues cleared.'); }
 
-            function exportCues() {
-                const data = { builtin: BUILTIN_CUES, custom: CUES.filter(c => c._custom), exportedAt: new Date()
-                        .toISOString() };
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
+            function exportCues() { const data = { builtin: BUILTIN_CUES, custom: CUES.filter(c => c._custom),
+                    exportedAt: new Date().toISOString() }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const
+                    url = URL.createObjectURL(blob); const a = document.createElement('a');
                 a.href = url;
                 a.download = '8ball_cues_export.json';
                 a.click();
                 URL.revokeObjectURL(url);
-                showDevToast('📋 Cues exported as JSON!');
-            }
+                showDevToast('📋 Exported as JSON!'); }
 
-            function showDevToast(msg) {
-                const el = document.getElementById('devToast');
+            function showDevToast(msg) { const el = document.getElementById('devToast');
                 el.textContent = msg;
                 el.style.opacity = '1';
-                setTimeout(() => el.style.opacity = '0', 2200);
-            }
+                setTimeout(() => el.style.opacity = '0', 2200); }
 
-            // ── DAILY BONUS ────────────────────────────────────
-            function checkDailyBonus() {
-                const last = localStorage.getItem('8ball_daily_last');
-                const today = new Date().toDateString();
-                if (last !== today) {
-                    setTimeout(() => {
-                        if (document.getElementById('splash').style.display === 'none') return;
+            function checkDailyBonus() { const last = localStorage.getItem('8ball_daily_v2'); const today = new Date()
+                    .toDateString(); if (last !== today) { setTimeout(() => { if (document.getElementById('splash').style
+                            .display === 'none') return;
                         document.getElementById('dailyBonus').style.display = 'flex';
-                        document.getElementById('dailyAmt').textContent = '+$' + (2 + Math.random() *
-                            3).toFixed(2);
-                    }, 1500);
-                }
-            }
+                        document.getElementById('dailyAmt').textContent = '+$' + (2 + Math.random() * 3).toFixed(
+                        2); }, 1500); } }
 
-            function claimDaily() {
-                const amt = parseFloat(document.getElementById('dailyAmt').textContent.replace('+$', ''));
+            function claimDaily() { const amt = parseFloat(document.getElementById('dailyAmt').textContent.replace('+$',
+                    ''));
                 bal += amt;
-                localStorage.setItem('8ball_daily_last', new Date().toDateString());
+                localStorage.setItem('8ball_daily_v2', new Date().toDateString());
                 document.getElementById('dailyBonus').style.display = 'none';
                 updateHUD();
-                chalk('DAILY BONUS! +$' + amt.toFixed(2), '#4ade80');
-            }
+                chalk('DAILY BONUS! +$' + amt.toFixed(2), '#4ade80'); }
 
-            // ── DEV PANEL ──────────────────────────────────────
-            function openDevPanel() {
-                document.getElementById('devPanel').style.display = 'flex';
-                updateDevPreview();
-            }
+            function openDevPanel() { document.getElementById('devPanel').style.display = 'flex';
+                updateDevPreview(); }
 
             function closeDevPanel() { document.getElementById('devPanel').style.display = 'none'; }
 
-            function updateDevPreview() {
-                const canvas = document.getElementById('dvPrevCanvas');
-                const container = document.getElementById('dvPreview');
-                canvas.width = container.offsetWidth || 280;
-                const c = canvas.getContext('2d');
-                c.clearRect(0, 0, canvas.width, canvas.height);
-                const cueData = getDevCueData();
-                c.save();
-                if (cueData.glow && cueData.glow !== 'rgba(140,180,255,0)') { c.shadowColor = cueData.glow;
+            function updateDevPreview() { const canvas = document.getElementById('dvPrevCanvas'); const container = document
+                    .getElementById('dvPreview');
+                canvas.width = container.offsetWidth || 280; const c = canvas.getContext('2d');
+                c.clearRect(0, 0, canvas.width, canvas.height); const cueData = getDevCueData();
+                c.save(); if (cueData.glow && cueData.glow !== 'rgba(140,180,255,0)') { c.shadowColor = cueData.glow;
                     c.shadowBlur = 10; }
                 drawCueFull(c, 4, canvas.height / 2, canvas.width - 8, 0, cueData);
-                c.restore();
-            }
+                c.restore(); }
 
-            function getDevCueData() {
-                return {
-                    name: document.getElementById('dvName').value || 'Custom',
-                    tier: document.getElementById('dvTier').value,
-                    tc: document.getElementById('dvGlow').value,
-                    price: parseFloat(document.getElementById('dvPrice').value) || 0,
-                    owned: false,
-                    power: parseInt(document.getElementById('dvPow').value),
-                    aim: parseInt(document.getElementById('dvAim').value),
-                    spin: parseInt(document.getElementById('dvSpin').value),
-                    time: parseInt(document.getElementById('dvTime').value),
-                    badge: document.getElementById('dvBadge').value || 'CUSTOM',
-                    glow: document.getElementById('dvGlow').value + '80',
-                    c1: document.getElementById('dvC1').value,
-                    c2: document.getElementById('dvC2').value,
-                    ring: document.getElementById('dvRing').value,
-                };
-            }
+            function getDevCueData() { return { name: document.getElementById('dvName').value || 'Custom', tier: document
+                        .getElementById('dvTier').value, tc: document.getElementById('dvGlow').value, price: parseFloat(
+                        document.getElementById('dvPrice').value) || 0, owned: false, power: parseInt(document.getElementById(
+                        'dvPow').value), aim: parseInt(document.getElementById('dvAim').value), spin: parseInt(document
+                        .getElementById('dvSpin').value), time: parseInt(document.getElementById('dvTime').value), badge: document
+                        .getElementById('dvBadge').value || 'CUSTOM', glow: document.getElementById('dvGlow').value +
+                    '80', c1: document.getElementById('dvC1').value, c2: document.getElementById('dvC2').value, ring: document
+                        .getElementById('dvRing').value, }; }
 
-            // Attach live preview
             ['dvName', 'dvTier', 'dvBadge', 'dvGlow', 'dvC1', 'dvC2', 'dvRing', 'dvPow', 'dvAim', 'dvSpin', 'dvTime',
                 'dvPrice'
-            ].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('input', updateDevPreview);
-            });
+            ].forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('input',
+                    updateDevPreview); });
 
-            function saveCustomCue() {
-                const data = getDevCueData();
+            function saveCustomCue() { const data = getDevCueData();
                 addCustomCue(data);
                 closeDevPanel();
-                renderShop();
-            }
+                renderShop(); }
 
-            function testCustomCue() {
-                const data = getDevCueData();
-                const tempId = 9999;
-                const existing = CUES.find(c => c.id === tempId);
-                if (existing) { CUES = CUES.filter(c => c.id !== tempId); }
+            function testCustomCue() { const data = getDevCueData(); const tempId = 9999; const existing = CUES.find(c => c
+                    .id === tempId); if (existing) CUES = CUES.filter(c => c.id !== tempId);
                 CUES.push({ ...data, id: tempId, _custom: true, owned: true, _new: true });
                 eq = tempId;
                 updateMini();
                 renderShop();
                 closeDevPanel();
-                chalk('🧪 Testing: ' + data.name, '#a855f7');
-            }
+                chalk('🧪 Testing: ' + data.name, '#a855f7'); }
 
-            function toggleDevMode() {
-                // Triple-click detection on shop title
-                if (!window._devClickCount) window._devClickCount = 0;
-                if (!window._devClickTime) window._devClickTime = Date.now();
-                const now = Date.now();
-                if (now - window._devClickTime > 800) window._devClickCount = 0;
+            function toggleDevMode() { if (!window._devClickCount) window._devClickCount = 0; if (!window._devClickTime)
+                    window._devClickTime = Date.now(); const now = Date.now(); if (now - window._devClickTime > 800) window
+                    ._devClickCount = 0;
                 window._devClickTime = now;
-                window._devClickCount++;
-                if (window._devClickCount >= 3) {
-                    window._devClickCount = 0;
+                window._devClickCount++; if (window._devClickCount >= 3) { window._devClickCount = 0;
                     devMode = !devMode;
                     document.getElementById('devBtn').style.display = devMode ? 'inline-block' : 'none';
                     chalk(devMode ? '🔓 DEV MODE ON' : '🔒 DEV MODE OFF', devMode ? '#a855f7' : '#888');
-                    renderShop();
-                }
-            }
+                    renderShop(); } }
 
-            // ── BIND CONTROLS ──────────────────────────────────
-            function bindControls() {
-                const pwtrack = document.getElementById('pwtrack'),
+            function bindControls() { const pwtrack = document.getElementById('pwtrack'),
                     pwthumb = document.getElementById('pwthumb'),
                     pwfill = document.getElementById('pwfill'),
-                    pwpct = document.getElementById('pwpct');
-                const spinring = document.getElementById('spinring'),
-                    spind = document.getElementById('spind');
-                let isPulling = false;
-
-                window.addEventListener('mousemove', (e) => {
-                    if (!shooting && yourTurn && cb) {
-                        angle = Math.atan2(e.clientY - cb.y, e.clientX - cb.x);
+                    pwpct = document.getElementById('pwpct'); const spinring = document.getElementById('spinring'),
+                    spind = document.getElementById('spind'); let isPulling = false;
+                window.addEventListener('mousemove', (e) => { if (!shooting && yourTurn && cb) { angle = Math.atan2(e
+                            .clientY - cb.y, e.clientX - cb.x);
                         sx = (e.clientX - W / 2) / (W / 2) * .3;
-                        sy = (e.clientY - H / 2) / (H / 2) * .3;
-                    }
-                });
-                window.addEventListener('touchmove', (e) => {
-                    if (!shooting && yourTurn && cb && e.touches[0]) {
-                        const t = e.touches[0];
+                        sy = (e.clientY - H / 2) / (H / 2) * .3; } });
+                window.addEventListener('touchmove', (e) => { if (!shooting && yourTurn && cb && e.touches[0]) { const t = e
+                            .touches[0];
                         angle = Math.atan2(t.clientY - cb.y, t.clientX - cb.x);
                         sx = (t.clientX - W / 2) / (W / 2) * .3;
-                        sy = (t.clientY - H / 2) / (H / 2) * .3;
-                    }
-                });
+                        sy = (t.clientY - H / 2) / (H / 2) * .3; } }, { passive: false });
                 pwtrack.addEventListener('mousedown', () => { isPulling = true; });
                 pwtrack.addEventListener('touchstart', () => { isPulling = true; });
                 window.addEventListener('mouseup', () => { isPulling = false; });
                 window.addEventListener('touchend', () => { isPulling = false; });
-                pwtrack.addEventListener('mousemove', (e) => {
-                    if (!isPulling) return;
-                    const rect = pwtrack.getBoundingClientRect();
-                    power = Math.max(0.1, Math.min(1, (e.clientX - rect.left) / rect.width));
+                pwtrack.addEventListener('mousemove', (e) => { if (!isPulling) return; const rect = pwtrack
+                        .getBoundingClientRect();
+                    power = Math.max(0.08, Math.min(1, (e.clientX - rect.left) / rect.width));
                     pwfill.style.width = power * 100 + '%';
                     pwthumb.style.left = power * 100 + '%';
-                    pwpct.textContent = (power * 100).toFixed(0) + '%';
-                });
-                spinring.addEventListener('mousemove', (e) => {
-                    if (!shooting && yourTurn) {
-                        const rect = spinring.getBoundingClientRect();
-                        const x = e.clientX - rect.left - 26,
-                            y = e.clientY - rect.top - 26;
-                        sx = Math.max(-1, Math.min(1, x / 26));
-                        sy = Math.max(-1, Math.min(1, y / 26));
+                    pwpct.textContent = (power * 100).toFixed(0) + '%'; });
+                spinring.addEventListener('mousemove', (e) => { if (!shooting && yourTurn) { const rect = spinring
+                        .getBoundingClientRect(); const x = e.clientX - rect.left - 25,
+                            y = e.clientY - rect.top - 25;
+                        sx = Math.max(-1, Math.min(1, x / 25));
+                        sy = Math.max(-1, Math.min(1, y / 25));
                         spind.style.left = (50 + sx * 40) + '%';
-                        spind.style.top = (50 + sy * 40) + '%';
-                    }
-                });
-                // Keyboard shortcut: Space to shoot
+                        spind.style.top = (50 + sy * 40) + '%'; } });
                 window.addEventListener('keydown', (e) => { if (e.code === 'Space' && yourTurn && !shooting && !over) { e
                         .preventDefault();
-                        APP.shoot(); } });
-            }
+                        APP.shoot(); } }); }
 
-            // ── PUBLIC API ─────────────────────────────────────
             return {
                 init: setup,
-                start() {
-                    cancelAnimationFrame(spRaf);
+                start() { cancelAnimationFrame(spRaf);
                     document.getElementById('splash').style.display = 'none';
                     document.getElementById('hud').style.display = 'block';
                     document.getElementById('ctrl').style.display = 'block';
@@ -2425,17 +2407,13 @@
                     updateHUD();
                     updateMini();
                     bindControls();
-                    loop();
-                },
-                shoot() {
-                    if (!yourTurn || shooting || over || !cb || cb.sunk) return;
-                    const cue = CUES[eq];
-                    const spd = power * (8.5 + cue.power * .075);
+                    loop(); },
+                shoot() { if (!yourTurn || shooting || over || !cb || cb.sunk) return; const cue = CUES[eq]; const spd =
+                        power * (8.5 + cue.power * .075);
                     cb.vx = Math.cos(angle) * spd + sx * 1.8;
                     cb.vy = Math.sin(angle) * spd + sy * 1.8;
                     shooting = true;
-                    chalk('SHOOT!', '#ffe566');
-                },
+                    chalk('SHOOT!', '#ffe566'); },
                 openShop() { renderShop();
                     document.getElementById('shop').style.display = 'flex'; },
                 closeShop() { document.getElementById('shop').style.display = 'none';
@@ -2446,20 +2424,16 @@
                 equipCue(id) { eq = id;
                     renderShop();
                     updateMini(); },
-                buyCue(id) {
-                    const cue = CUES.find(c => c.id === id);
-                    if (!cue) return;
-                    if (bal < cue.price) { chalk('INSUFFICIENT FUNDS', '#ef4444'); return; }
+                buyCue(id) { const cue = CUES.find(c => c.id === id); if (!cue) return; if (bal < cue.price) { chalk(
+                        'INSUFFICIENT FUNDS', '#ef4444'); return; }
                     bal -= cue.price;
                     cue.owned = true;
                     eq = id;
                     updateHUD();
                     renderShop();
                     updateMini();
-                    chalk('CUE PURCHASED!', '#22c55e');
-                },
-                restart() {
-                    document.getElementById('winscr').style.display = 'none';
+                    chalk('CUE PURCHASED!', '#22c55e'); },
+                restart() { document.getElementById('winscr').style.display = 'none';
                     balls = [];
                     parts = [];
                     yN = [1, 2, 3, 4, 5, 6, 7];
@@ -2473,10 +2447,8 @@
                     updateStreakBadge();
                     initBalls();
                     updateStrips();
-                    updateHUD();
-                },
-                lobby() {
-                    document.getElementById('winscr').style.display = 'none';
+                    updateHUD(); },
+                lobby() { document.getElementById('winscr').style.display = 'none';
                     document.getElementById('hud').style.display = 'none';
                     document.getElementById('ctrl').style.display = 'none';
                     document.getElementById('shop').style.display = 'none';
@@ -2484,8 +2456,7 @@
                     document.getElementById('splash').style.display = 'flex';
                     cancelAnimationFrame(raf);
                     buildSplash();
-                    checkDailyBonus();
-                },
+                    checkDailyBonus(); },
                 openDevPanel,
                 closeDevPanel,
                 saveCustomCue,
